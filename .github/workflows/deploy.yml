@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build site with version stamp
+        env:
+          VERSION: ${{ github.event.release.tag_name || 'dev' }}
+        run: |
+          mkdir _site
+          cp index.html _site/
+          SHA=$(git rev-parse --short HEAD)
+          DATE=$(git log -1 --format=%cs)
+          sed -i "s/__BUILD_VERSION__/$VERSION/g; s/__BUILD_SHA__/$SHA/g; s/__BUILD_DATE__/$DATE/g" _site/index.html
+          grep -o "Версия [^<]*" _site/index.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
