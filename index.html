@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Протокол итерации</title>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#e7ecee;
+  --surface:#fbfcfc;
+  --surface-2:#f1f4f5;
+  --ink:#16202a;
+  --muted:#5c6e7b;
+  --faint:#8a9aa5;
+  --line:#cdd7dc;
+  --line-soft:#dde5e8;
+  --accent:#186b66;
+  --accent-ink:#0e4c48;
+  --accent-wash:#dbeae8;
+  --t-green:#2e7d4f;
+  --t-red:#ae3b2b;
+  --t-amber:#8a6a1f;
+  --t-violet:#6f4ca0;
+  --t-blue:#1f5f8a;
+  --t-slate:#54666f;
+  --shadow:0 1px 2px rgba(22,32,42,.06), 0 8px 24px -18px rgba(22,32,42,.5);
+  --radius:3px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12181d;
+    --surface:#1a2228;
+    --surface-2:#212b32;
+    --ink:#e3eaee;
+    --muted:#9aacb6;
+    --faint:#6d7f8a;
+    --line:#2f3b44;
+    --line-soft:#273239;
+    --accent:#48a7a0;
+    --accent-ink:#7fc8c2;
+    --accent-wash:#1b3a38;
+    --t-green:#5cb37c;
+    --t-red:#e07a67;
+    --t-amber:#c9a353;
+    --t-violet:#a98adb;
+    --t-blue:#5b9dcd;
+    --t-slate:#8ba0aa;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px #000;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12181d;
+  --surface:#1a2228;
+  --surface-2:#212b32;
+  --ink:#e3eaee;
+  --muted:#9aacb6;
+  --faint:#6d7f8a;
+  --line:#2f3b44;
+  --line-soft:#273239;
+  --accent:#48a7a0;
+  --accent-ink:#7fc8c2;
+  --accent-wash:#1b3a38;
+  --t-green:#5cb37c;
+  --t-red:#e07a67;
+  --t-amber:#c9a353;
+  --t-violet:#a98adb;
+  --t-blue:#5b9dcd;
+  --t-slate:#8ba0aa;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px #000;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* ---------- top bar ---------- */
+.bar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  padding:14px 22px;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+}
+.bar h1{
+  margin:0;
+  font-family:Archivo,"Archivo Narrow","IBM Plex Sans",sans-serif;
+  font-weight:700;font-size:19px;letter-spacing:-.015em;
+}
+.bar .meta{color:var(--faint);font-size:12px;font-family:"IBM Plex Mono",monospace}
+.bar .spacer{flex:1 1 auto}
+.bar .acts{display:flex;gap:8px;align-self:center}
+
+.btn{
+  border:1px solid var(--line);
+  background:var(--surface-2);
+  padding:6px 12px;border-radius:var(--radius);
+  font-size:13px;font-weight:500;
+  transition:border-color .12s, background .12s, color .12s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn--primary{
+  background:var(--accent);border-color:var(--accent);
+  color:#fff;font-weight:600;
+}
+.btn--primary:hover{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff}
+.btn--ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn--ghost:hover{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+.btn--sm{padding:3px 9px;font-size:12px}
+
+/* ---------- layout ---------- */
+.wrap{
+  display:flex;flex-direction:column;gap:22px;
+  padding:22px;
+  max-width:1060px;margin:0 auto;
+}
+.editor{display:flex;flex-direction:column;gap:14px;min-width:0}
+.bottom{display:flex;flex-direction:column;gap:12px;min-width:0}
+
+/* ---------- block card ---------- */
+.block{
+  background:var(--surface);
+  border:1px solid var(--line-soft);
+  border-left:3px solid var(--tone,var(--t-slate));
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.block__head{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 10px 9px 12px;
+  border-bottom:1px solid var(--line-soft);
+}
+.glyph{
+  flex:none;width:26px;height:26px;border-radius:var(--radius);
+  display:grid;place-items:center;font-size:15px;
+  background:var(--surface-2);border:1px solid var(--line-soft);
+}
+.i-title{
+  flex:1 1 auto;min-width:60px;
+  border:1px solid transparent;background:transparent;
+  padding:3px 6px;border-radius:var(--radius);
+  font-family:Archivo,"IBM Plex Sans",sans-serif;
+  font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
+}
+.i-code,.i-after{
+  border:1px solid transparent;background:transparent;
+  padding:3px 6px;border-radius:var(--radius);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);
+}
+.i-code{width:20ch;flex:none}
+.i-after{width:11ch;flex:none}
+.i-title:hover,.i-code:hover,.i-after:hover{background:var(--surface-2)}
+.i-title:focus,.i-code:focus,.i-after:focus{background:var(--surface-2);border-color:var(--line);outline:none}
+.i-code::placeholder,.i-after::placeholder{color:var(--faint)}
+
+.tone-dot{
+  flex:none;width:16px;height:16px;border-radius:50%;
+  background:var(--tone,var(--t-slate));
+  border:2px solid var(--surface);
+  box-shadow:0 0 0 1px var(--line);
+}
+.head-tools{display:flex;gap:2px;align-items:center;flex:none}
+.icobtn{
+  width:24px;height:24px;border-radius:var(--radius);
+  display:grid;place-items:center;color:var(--faint);
+  font-size:13px;line-height:1;
+}
+.icobtn:hover{background:var(--surface-2);color:var(--ink)}
+.icobtn--danger:hover{background:var(--surface-2);color:var(--t-red)}
+
+/* ---------- items ---------- */
+.items{display:flex;flex-direction:column;padding:4px 0}
+.item{
+  display:grid;
+  grid-template-columns:22px minmax(0,1fr) auto;
+  align-items:start;gap:6px;
+  padding:4px 8px 4px 4px;
+  border-top:1px solid transparent;
+  border-bottom:1px solid transparent;
+}
+.item + .item{border-top-color:var(--line-soft)}
+.item.drop-above{border-top-color:var(--accent)}
+.item.drop-below{border-bottom-color:var(--accent)}
+.item.dragging{opacity:.35}
+.handle{
+  width:22px;height:26px;border-radius:var(--radius);
+  display:grid;place-items:center;
+  color:var(--faint);cursor:grab;
+  font-size:13px;line-height:1;
+}
+.handle:hover{background:var(--surface-2);color:var(--ink)}
+.handle:active{cursor:grabbing}
+.ta{
+  width:100%;resize:none;overflow:hidden;
+  border:1px solid transparent;border-radius:var(--radius);
+  background:transparent;
+  padding:4px 6px;
+  min-height:26px;line-height:1.45;
+}
+.ta:hover{background:var(--surface-2)}
+.ta:focus{background:var(--surface-2);border-color:var(--line);outline:none}
+.item__right{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-top:3px;justify-content:flex-end}
+
+.chip{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;font-weight:500;letter-spacing:.03em;
+  padding:2px 7px;border-radius:999px;
+  border:1px solid var(--chip,var(--t-slate));
+  color:var(--chip,var(--t-slate));
+  background:transparent;
+  transition:background .12s,color .12s;
+}
+.chip[aria-pressed="true"]{background:var(--chip,var(--t-slate));color:var(--surface);border-color:var(--chip)}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#10171c}
+.chip:hover{opacity:.8}
+.item:not(.open) .chip[aria-pressed="false"]{display:none}
+.plus{
+  width:20px;height:20px;border-radius:50%;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  border:1px dashed var(--line);color:var(--faint);
+}
+.plus svg{display:block;width:9px;height:9px}
+.plus:hover{border-style:solid;border-color:var(--accent);color:var(--accent-ink)}
+.item.open .plus{background:var(--accent-wash);border-style:solid;border-color:var(--accent);color:var(--accent-ink)}
+
+/* bold / italic */
+.fmt{
+  width:22px;height:20px;border-radius:var(--radius);
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid transparent;color:var(--faint);
+  font-size:12.5px;line-height:1;
+}
+.fmt--b{font-family:Archivo,sans-serif;font-weight:700}
+.fmt--i{font-style:italic;font-family:"IBM Plex Sans",sans-serif}
+.fmt:hover{background:var(--surface-2);color:var(--ink)}
+.fmt[aria-pressed="true"]{
+  background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);
+}
+.ta.is-bold{font-weight:600}
+.ta.is-italic{font-style:italic}
+.sep{width:1px;height:16px;background:var(--line-soft);margin:0 2px}
+
+.block__foot{
+  display:flex;gap:6px;align-items:center;
+  padding:6px 10px 8px 12px;
+  border-top:1px solid var(--line-soft);
+}
+.raw-ta{
+  width:100%;resize:vertical;min-height:70px;
+  border:1px solid var(--line-soft);border-radius:var(--radius);
+  background:var(--surface-2);
+  padding:8px 10px;margin:8px;width:calc(100% - 16px);
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.6;
+}
+.raw-ta:focus{border-color:var(--line);outline:none}
+
+/* ---------- side panels ---------- */
+.panel{
+  background:var(--surface);
+  border:1px solid var(--line-soft);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  min-width:0;
+}
+.panel__head{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-bottom:1px solid var(--line-soft);
+}
+.panel--closed .panel__head{border-bottom-color:transparent}
+.panel--closed .panel__body{display:none}
+.panel__toggle{
+  display:flex;align-items:center;gap:8px;flex:1 1 auto;
+  padding:0;text-align:left;color:var(--muted);
+}
+.panel__toggle:hover{color:var(--ink)}
+.panel__toggle h2{
+  margin:0;
+  font-family:Archivo,"IBM Plex Sans",sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:inherit;
+}
+.caret{
+  flex:none;font-size:10px;line-height:1;color:var(--faint);
+  transition:transform .15s;transform:rotate(90deg);
+}
+.panel--closed .caret{transform:rotate(0deg)}
+.panel__note{color:var(--faint);font-size:11.5px;font-family:"IBM Plex Mono",monospace}
+.out{
+  margin:0;padding:12px 14px;
+  max-height:62vh;overflow:auto;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12.5px;line-height:1.65;
+  white-space:pre-wrap;word-break:break-word;
+  tab-size:4;
+}
+.out .h{color:var(--accent-ink);font-weight:500}
+.out .b{color:var(--faint)}
+.out .s{color:var(--t-violet)}
+.out .st{color:var(--ink);font-weight:500}
+
+.tags{display:flex;flex-direction:column;gap:6px;padding:10px 12px}
+.tagrow{display:grid;grid-template-columns:7ch minmax(0,1fr) 18px 24px;gap:6px;align-items:center}
+.tagrow input{
+  border:1px solid var(--line-soft);background:var(--surface-2);
+  border-radius:var(--radius);padding:4px 7px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;
+}
+.tagrow input:focus{border-color:var(--accent);outline:none}
+.swatch{
+  width:18px;height:18px;border-radius:50%;border:1px solid var(--line);
+  background:var(--chip);
+}
+.hint{
+  padding:0 12px 11px;color:var(--faint);font-size:12px;line-height:1.5;
+}
+.hint code{font-family:"IBM Plex Mono",monospace;color:var(--muted)}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);
+  background:var(--ink);color:var(--ground);
+  padding:7px 16px;border-radius:999px;
+  font-size:13px;font-weight:500;
+  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+  z-index:50;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar">
+  <h1>Протокол итерации</h1>
+  <span class="meta" id="stat"></span>
+  <span class="spacer"></span>
+  <span class="acts">
+    <button class="btn btn--ghost btn--sm" id="reset">Сбросить к шаблону</button>
+    <button class="btn btn--ghost btn--sm" id="clear">Очистить</button>
+    <button class="btn btn--primary" id="copy">Скопировать Markdown</button>
+  </span>
+</div>
+
+<div class="wrap">
+  <div class="editor">
+    <div id="blocks"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" data-add="list">+ Блок со списком</button>
+      <button class="btn" data-add="quote">+ Блок-цитата</button>
+      <button class="btn" data-add="raw">+ Свободный Markdown</button>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <section class="panel panel--closed" id="panel-md">
+      <div class="panel__head">
+        <button class="panel__toggle" data-toggle="md" aria-expanded="false" aria-controls="md-body">
+          <span class="caret">▶</span>
+          <h2>Markdown</h2>
+          <span class="panel__note" id="stat2"></span>
+        </button>
+        <button class="btn btn--sm" id="copy2">Скопировать</button>
+      </div>
+      <div class="panel__body" id="md-body">
+        <pre class="out" id="out"></pre>
+      </div>
+    </section>
+
+    <section class="panel panel--closed" id="panel-tags">
+      <div class="panel__head">
+        <button class="panel__toggle" data-toggle="tags" aria-expanded="false" aria-controls="tags-body">
+          <span class="caret">▶</span>
+          <h2>Стикеры записей</h2>
+          <span class="panel__note" id="tagnote"></span>
+        </button>
+        <button class="btn btn--sm" id="addtag">+ Стикер</button>
+      </div>
+      <div class="panel__body" id="tags-body">
+        <div class="tags" id="tags"></div>
+        <p class="hint">Слева — подпись на кнопке, справа — код, который уйдёт в Markdown перед текстом записи. Подчёркивания экранируются сами: <code>:performing_arts:</code> → <code>:performing\_arts:</code></p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<p class="build" style="text-align:center;margin:0 0 22px;color:var(--faint);font:11px 'IBM Plex Mono',monospace">Версия __BUILD_VERSION__ · __BUILD_SHA__ · __BUILD_DATE__</p>
+<div class="toast" id="toast"></div>
+
+<script>
+const TONES = ["green","red","amber","violet","blue","slate"];
+const GLYPHS = {
+  "super-admin-green-dot":"🟢","super-admin-red-dot":"🔴","question":"❓","exclamation":"❗",
+  "briefcase":"💼","performing_arts":"🎭","yandexdisk":"💽","white_check_mark":"✅",
+  "fire":"🔥","warning":"⚠️","bulb":"💡","memo":"📝","calendar":"📅","rocket":"🚀",
+  "small":"🟩","medium":"🟨","large":"🟧","x-large":"🟥","ux":"🪄","bug":"🐞"
+};
+const uid = () => Math.random().toString(36).slice(2,9);
+
+function sample(){
+  const L = (type,sticker,title,tone,lines,after) => ({
+    id:uid(), type, sticker, title, after:after||"", tone,
+    items:(lines||[]).map(l => Array.isArray(l)
+      ? {id:uid(), text:l[0], tags:l[1]}
+      : {id:uid(), text:l, tags:[]}),
+    text:""
+  });
+  return {
+    tags:[
+      {id:"s",  label:"S",  code:"small",   tone:"green"},
+      {id:"m",  label:"M",  code:"medium",  tone:"amber"},
+      {id:"l",  label:"L",  code:"large",   tone:"red"},
+      {id:"ux", label:"UX", code:"ux",      tone:"violet"}
+    ],
+    blocks:[
+      L("list","super-admin-green-dot","ПЛЮСЫ","green",[]),
+      L("list","super-admin-red-dot","МИНУСЫ","red",[]),
+      L("list","question","Вопросы","amber",[]),
+      L("list","exclamation","Идеи","violet",[]),
+      L("list","briefcase","ПЛАНЫ","blue",[]),
+      L("list","performing_arts","ПРЕЗА","slate",[]),
+      L("quote","yandexdisk","ЗАПИСЬ","slate",[
+        "Открывается только с корпоративной почты  (БУДЕТ ПОЗЖЕ)",
+        "Ссылка на видео:  ",
+        "Ссылка на аудио:  "
+      ]),
+      {id:uid(),type:"raw",sticker:"",title:"Подвал",after:"",tone:"slate",items:[],
+       text:""}
+    ]
+  };
+}
+
+const KEY = "protokol-iteracii-v1";
+let state = load() || sample();
+state.ui = state.ui || {md:false, tags:false};
+
+function load(){
+  try{ const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; }
+  catch(e){ return null; }
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+
+/* ---------------- markdown ---------------- */
+const esc = s => String(s).replace(/_/g,"\\_");
+const code = c => c ? ":" + esc(c.replace(/^:|:$/g,"")) + ":" : "";
+
+/* whole-line emphasis: keeps leading/trailing spaces outside the markers */
+function emphasize(it){
+  const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(it.text);
+  const lead = m[1], core = m[2], tail = m[3];
+  if(!core) return it.text;
+  let s = core;
+  if(it.italic) s = "_" + s + "_";
+  if(it.bold) s = "**" + s + "**";
+  return lead + s + tail;
+}
+
+function markdown(){
+  const tagById = {};
+  state.tags.forEach(t => tagById[t.id] = t);
+  const out = [];
+  state.blocks.forEach(b => {
+    if(b.type === "raw"){
+      if(b.text.trim()) out.push(b.text.trim());
+      return;
+    }
+    const head = ["###", code(b.sticker), "\\[ " + b.title.trim() + " \\]", b.after.trim()]
+      .filter(Boolean).join(" ");
+    const lines = b.items.map(it => {
+      const stickers = (it.tags||[])
+        .map(id => tagById[id] && code(tagById[id].code))
+        .filter(Boolean).join(" ");
+      const body = (stickers ? stickers + " " : "") + emphasize(it);
+      return b.type === "quote" ? "> " + body : "*   " + body;
+    });
+    out.push(lines.length ? head + "\n\n" + lines.join("\n") : head);
+  });
+  return out.join("\n\n") + "\n";
+}
+
+function highlight(md){
+  return md.split("\n").map(l => {
+    const e = l.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+    if(/^###/.test(l)) return '<span class="h">' + e + "</span>";
+    if(/^&?gt;|^>/.test(l)) return '<span class="b">' + e + "</span>";
+    return e.replace(/^(\*\s{3})/, '<span class="b">$1</span>')
+            .replace(/(\\\[|\\\])/g,'<span class="b">$1</span>')
+            .replace(/(:[a-z0-9\\_-]+:)/gi, '<span class="s">$1</span>')
+            .replace(/(\*\*[^*]+\*\*)/g, '<span class="st">$1</span>');
+  }).join("\n");
+}
+
+/* ---------------- render ---------------- */
+const $blocks = document.getElementById("blocks");
+const $out = document.getElementById("out");
+const $tags = document.getElementById("tags");
+const $stat = document.getElementById("stat");
+
+function renderOut(){
+  const md = markdown();
+  $out.innerHTML = highlight(md);
+  const items = state.blocks.reduce((n,b) => n + b.items.length, 0);
+  $stat.textContent = state.blocks.length + " блоков · " + items + " записей · " + md.length + " симв.";
+  const st2 = document.getElementById("stat2");
+  if(st2) st2.textContent = md.split("\n").length + " строк";
+  save();
+}
+
+function grow(ta){ ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px"; }
+
+function tagOf(id){ return state.tags.find(t => t.id === id); }
+
+function renderTags(){
+  $tags.innerHTML = "";
+  const note = document.getElementById("tagnote");
+  if(note) note.textContent = state.tags.map(t => t.label).join(" · ");
+  state.tags.forEach(t => {
+    const row = document.createElement("div");
+    row.className = "tagrow";
+    row.innerHTML =
+      '<input class="t-label" value="" aria-label="Подпись стикера">' +
+      '<input class="t-code" value="" aria-label="Код стикера" placeholder="small">' +
+      '<button class="swatch" title="Сменить цвет" aria-label="Сменить цвет стикера"></button>' +
+      '<button class="icobtn icobtn--danger" title="Удалить стикер" aria-label="Удалить стикер">✕</button>';
+    const [lab, cod] = row.querySelectorAll("input");
+    const [sw, del] = row.querySelectorAll("button");
+    lab.value = t.label; cod.value = t.code;
+    row.style.setProperty("--chip", "var(--t-" + t.tone + ")");
+    lab.oninput = () => { t.label = lab.value; renderBlocks(); };
+    cod.oninput = () => { t.code = cod.value; renderOut(); };
+    sw.onclick = () => {
+      t.tone = TONES[(TONES.indexOf(t.tone) + 1) % TONES.length];
+      renderTags(); renderBlocks();
+    };
+    del.onclick = () => {
+      state.tags = state.tags.filter(x => x.id !== t.id);
+      state.blocks.forEach(b => b.items.forEach(i => i.tags = (i.tags||[]).filter(x => x !== t.id)));
+      renderTags(); renderBlocks();
+    };
+    $tags.appendChild(row);
+  });
+}
+
+let drag = null;
+
+function renderBlocks(){
+  $blocks.innerHTML = "";
+  const frag = document.createDocumentFragment();
+
+  state.blocks.forEach((b, bi) => {
+    const card = document.createElement("section");
+    card.className = "block";
+    card.style.setProperty("--tone", "var(--t-" + b.tone + ")");
+
+    /* head */
+    const head = document.createElement("div");
+    head.className = "block__head";
+    head.innerHTML =
+      '<span class="glyph"></span>' +
+      '<input class="i-code" placeholder=":sticker:" aria-label="Код стикера блока">' +
+      '<input class="i-title" aria-label="Заголовок блока">' +
+      '<input class="i-after" placeholder="@кто-то" aria-label="Приписка после заголовка">' +
+      '<div class="head-tools">' +
+        '<button class="icobtn" data-a="tone" title="Цвет блока" aria-label="Цвет блока"><span class="tone-dot"></span></button>' +
+        '<button class="icobtn" data-a="up" title="Блок выше" aria-label="Переместить блок выше">↑</button>' +
+        '<button class="icobtn" data-a="down" title="Блок ниже" aria-label="Переместить блок ниже">↓</button>' +
+        '<button class="icobtn icobtn--danger" data-a="del" title="Удалить блок" aria-label="Удалить блок">✕</button>' +
+      '</div>';
+    const glyph = head.querySelector(".glyph");
+    const iCode = head.querySelector(".i-code");
+    const iTitle = head.querySelector(".i-title");
+    const iAfter = head.querySelector(".i-after");
+    const setGlyph = () => {
+      const k = (b.sticker || "").replace(/^:|:$/g,"");
+      glyph.textContent = GLYPHS[k] || (b.type === "raw" ? "¶" : "•");
+    };
+    iCode.value = b.sticker; iTitle.value = b.title; iAfter.value = b.after;
+    if(b.type === "raw"){ iCode.style.display = "none"; iAfter.style.display = "none"; }
+    setGlyph();
+    iCode.oninput = () => { b.sticker = iCode.value; setGlyph(); renderOut(); };
+    iTitle.oninput = () => { b.title = iTitle.value; renderOut(); };
+    iAfter.oninput = () => { b.after = iAfter.value; renderOut(); };
+    head.querySelector('[data-a="tone"]').onclick = () => {
+      b.tone = TONES[(TONES.indexOf(b.tone) + 1) % TONES.length];
+      renderBlocks();
+    };
+    head.querySelector('[data-a="up"]').onclick = () => moveBlock(bi, bi - 1);
+    head.querySelector('[data-a="down"]').onclick = () => moveBlock(bi, bi + 1);
+    head.querySelector('[data-a="del"]').onclick = () => {
+      state.blocks.splice(bi, 1); renderBlocks();
+    };
+    card.appendChild(head);
+
+    /* body */
+    if(b.type === "raw"){
+      const ta = document.createElement("textarea");
+      ta.className = "raw-ta";
+      ta.value = b.text;
+      ta.setAttribute("aria-label", "Свободный Markdown");
+      ta.oninput = () => { b.text = ta.value; renderOut(); };
+      card.appendChild(ta);
+    } else {
+      const list = document.createElement("div");
+      list.className = "items";
+      b.items.forEach((it, ii) => list.appendChild(itemRow(b, it, ii)));
+      card.appendChild(list);
+
+      const foot = document.createElement("div");
+      foot.className = "block__foot";
+      const add = document.createElement("button");
+      add.className = "btn btn--sm";
+      add.textContent = b.type === "quote" ? "+ Строка" : "+ Запись";
+      add.onclick = () => {
+        b.items.push({id:uid(), text:"", tags:[]});
+        renderBlocks();
+        const tas = card.querySelectorAll(".ta");
+        if(tas.length) tas[tas.length - 1].focus();
+      };
+      foot.appendChild(add);
+      card.appendChild(foot);
+    }
+
+    frag.appendChild(card);
+  });
+
+  $blocks.appendChild(frag);
+  $blocks.style.display = "flex";
+  $blocks.style.flexDirection = "column";
+  $blocks.style.gap = "14px";
+  $blocks.querySelectorAll(".ta").forEach(grow);
+  renderOut();
+}
+
+function itemRow(b, it, ii){
+  const row = document.createElement("div");
+  row.className = "item";
+  row.dataset.i = ii;
+
+  const handle = document.createElement("button");
+  handle.className = "handle";
+  handle.draggable = true;
+  handle.textContent = "⠿";
+  handle.title = "Перетащить, или ↑ / ↓ с клавиатуры";
+  handle.setAttribute("aria-label", "Переместить запись " + (ii + 1));
+  handle.addEventListener("dragstart", e => {
+    drag = {block:b.id, from:ii};
+    row.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", it.id);
+  });
+  handle.addEventListener("dragend", () => {
+    drag = null;
+    row.classList.remove("dragging");
+    document.querySelectorAll(".drop-above,.drop-below")
+      .forEach(n => n.classList.remove("drop-above","drop-below"));
+  });
+  handle.addEventListener("keydown", e => {
+    if(e.key === "ArrowUp"){ e.preventDefault(); moveItem(b, ii, ii - 1, true); }
+    if(e.key === "ArrowDown"){ e.preventDefault(); moveItem(b, ii, ii + 1, true); }
+  });
+
+  row.addEventListener("dragover", e => {
+    if(!drag || drag.block !== b.id) return;
+    e.preventDefault();
+    const before = e.clientY < row.getBoundingClientRect().top + row.offsetHeight / 2;
+    row.classList.toggle("drop-above", before);
+    row.classList.toggle("drop-below", !before);
+  });
+  row.addEventListener("dragleave", () => row.classList.remove("drop-above","drop-below"));
+  row.addEventListener("drop", e => {
+    if(!drag || drag.block !== b.id) return;
+    e.preventDefault();
+    const before = e.clientY < row.getBoundingClientRect().top + row.offsetHeight / 2;
+    let to = before ? ii : ii + 1;
+    if(drag.from < to) to -= 1;
+    moveItem(b, drag.from, to);
+  });
+
+  const ta = document.createElement("textarea");
+  ta.className = "ta";
+  const syncStyle = () => {
+    ta.classList.toggle("is-bold", !!it.bold);
+    ta.classList.toggle("is-italic", !!it.italic);
+  };
+  syncStyle();
+  ta.rows = 1;
+  ta.value = it.text;
+  ta.setAttribute("aria-label", "Текст записи");
+  ta.oninput = () => { it.text = ta.value; grow(ta); renderOut(); };
+  ta.addEventListener("keydown", e => {
+    if(e.key === "Enter" && !e.shiftKey){
+      e.preventDefault();
+      b.items.splice(ii + 1, 0, {id:uid(), text:"", tags:[]});
+      renderBlocks();
+      focusItem(b.id, ii + 1);
+    }
+    if(e.key === "Backspace" && ta.value === "" && b.items.length > 1){
+      e.preventDefault();
+      b.items.splice(ii, 1);
+      renderBlocks();
+      focusItem(b.id, Math.max(0, ii - 1));
+    }
+  });
+
+  const right = document.createElement("div");
+  right.className = "item__right";
+
+  const fmtBtn = (kind, label, title) => {
+    const btn = document.createElement("button");
+    btn.className = "fmt fmt--" + (kind === "bold" ? "b" : "i");
+    btn.textContent = label;
+    btn.title = title;
+    btn.setAttribute("aria-label", title);
+    btn.setAttribute("aria-pressed", it[kind] ? "true" : "false");
+    btn.onclick = () => {
+      it[kind] = !it[kind];
+      btn.setAttribute("aria-pressed", it[kind] ? "true" : "false");
+      syncStyle();
+      renderOut();
+    };
+    return btn;
+  };
+  const bBtn = fmtBtn("bold", "Ж", "Жирная строка (Ctrl+B)");
+  const iBtn = fmtBtn("italic", "К", "Курсивная строка (Ctrl+I)");
+  right.append(bBtn, iBtn);
+  const sep = document.createElement("span");
+  sep.className = "sep";
+  right.appendChild(sep);
+
+  ta.addEventListener("keydown", e => {
+    if(!(e.ctrlKey || e.metaKey)) return;
+    const k = e.key.toLowerCase();
+    if(k === "b"){ e.preventDefault(); bBtn.click(); }
+    if(k === "i"){ e.preventDefault(); iBtn.click(); }
+  });
+
+  state.tags.forEach(t => {
+    const on = (it.tags || []).includes(t.id);
+    const chip = document.createElement("button");
+    chip.className = "chip";
+    chip.textContent = t.label || t.code;
+    chip.style.setProperty("--chip", "var(--t-" + t.tone + ")");
+    chip.setAttribute("aria-pressed", on ? "true" : "false");
+    chip.title = ":" + t.code + ":";
+    chip.onclick = () => {
+      it.tags = it.tags || [];
+      const nowOn = !it.tags.includes(t.id);
+      it.tags = nowOn ? [...it.tags, t.id] : it.tags.filter(x => x !== t.id);
+      chip.setAttribute("aria-pressed", nowOn ? "true" : "false");
+      row.classList.add("open");
+      renderOut();
+    };
+    right.appendChild(chip);
+  });
+  const plus = document.createElement("button");
+  plus.className = "plus";
+  plus.innerHTML = '<svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">' +
+    '<path d="M5 0.6 V9.4 M0.6 5 H9.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>';
+  plus.title = "Показать все стикеры";
+  plus.setAttribute("aria-label", "Показать все стикеры");
+  plus.onclick = () => row.classList.toggle("open");
+  right.appendChild(plus);
+
+  const del = document.createElement("button");
+  del.className = "icobtn icobtn--danger";
+  del.textContent = "✕";
+  del.title = "Удалить запись";
+  del.setAttribute("aria-label", "Удалить запись");
+  del.onclick = () => { b.items.splice(ii, 1); renderBlocks(); };
+  right.appendChild(del);
+
+  row.append(handle, ta, right);
+  return row;
+}
+
+function focusItem(blockId, index){
+  const bi = state.blocks.findIndex(x => x.id === blockId);
+  if(bi < 0) return;
+  const card = $blocks.children[bi];
+  if(!card) return;
+  const tas = card.querySelectorAll(".ta");
+  if(tas[index]){ tas[index].focus(); tas[index].setSelectionRange(tas[index].value.length, tas[index].value.length); }
+}
+
+function moveItem(b, from, to, keepFocus){
+  if(to < 0 || to >= b.items.length || from === to) return;
+  const [moved] = b.items.splice(from, 1);
+  b.items.splice(to, 0, moved);
+  renderBlocks();
+  if(keepFocus){
+    const bi = state.blocks.findIndex(x => x.id === b.id);
+    const card = $blocks.children[bi];
+    const handles = card && card.querySelectorAll(".handle");
+    if(handles && handles[to]) handles[to].focus();
+  }
+}
+
+function moveBlock(from, to){
+  if(to < 0 || to >= state.blocks.length) return;
+  const [moved] = state.blocks.splice(from, 1);
+  state.blocks.splice(to, 0, moved);
+  renderBlocks();
+}
+
+/* ---------------- toolbar ---------------- */
+let toastTimer;
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("on"), 1800);
+}
+
+function copyMd(){
+  const md = markdown();
+  const done = () => toast("Markdown скопирован");
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(md).then(done, fallback);
+  } else fallback();
+  function fallback(){
+    const ta = document.createElement("textarea");
+    ta.value = md;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }
+    catch(e){ toast("Не получилось скопировать — выделите текст справа"); }
+    ta.remove();
+  }
+}
+
+document.getElementById("copy").onclick = copyMd;
+document.getElementById("copy2").onclick = copyMd;
+
+document.getElementById("reset").onclick = () => {
+  const ui = state.ui;
+  state = sample(); state.ui = ui;
+  renderTags(); renderBlocks(); toast("Шаблон загружен");
+};
+document.getElementById("clear").onclick = () => {
+  state = {
+    ui: state.ui,
+    tags: state.tags,
+    blocks: [{id:uid(), type:"list", sticker:"", title:"НОВЫЙ БЛОК", after:"", tone:"slate",
+              items:[{id:uid(), text:"", tags:[]}], text:""}]
+  };
+  renderBlocks(); toast("Всё очищено");
+};
+
+document.querySelectorAll("[data-add]").forEach(btn => {
+  btn.onclick = () => {
+    const type = btn.dataset.add;
+    state.blocks.push({
+      id:uid(), type,
+      sticker: type === "raw" ? "" : "memo",
+      title: type === "quote" ? "ЗАПИСЬ" : type === "raw" ? "Свободный блок" : "НОВЫЙ БЛОК",
+      after:"", tone:"slate",
+      items: type === "raw" ? [] : [{id:uid(), text:"", tags:[]}],
+      text:""
+    });
+    renderBlocks();
+    $blocks.lastElementChild.scrollIntoView({block:"nearest", behavior:"smooth"});
+  };
+});
+
+/* collapsible bottom panels */
+function syncPanels(){
+  [["md","panel-md"],["tags","panel-tags"]].forEach(([key,id]) => {
+    const panel = document.getElementById(id);
+    const open = !!state.ui[key];
+    panel.classList.toggle("panel--closed", !open);
+    panel.querySelector(".panel__toggle").setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  save();
+}
+document.querySelectorAll("[data-toggle]").forEach(btn => {
+  btn.onclick = () => {
+    const key = btn.dataset.toggle;
+    state.ui[key] = !state.ui[key];
+    syncPanels();
+    if(state.ui[key]) btn.closest(".panel").scrollIntoView({block:"nearest", behavior:"smooth"});
+  };
+});
+
+document.getElementById("addtag").onclick = () => {
+  state.tags.push({id:uid(), label:"XL", code:"x-large", tone:"blue"});
+  state.ui.tags = true;
+  syncPanels(); renderTags(); renderBlocks();
+};
+
+document.addEventListener("keydown", e => {
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "c"){
+    e.preventDefault(); copyMd();
+  }
+});
+
+syncPanels();
+renderTags();
+renderBlocks();
+</script>
+
+</body></html>
