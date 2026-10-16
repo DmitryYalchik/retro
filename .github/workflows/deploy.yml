@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -22,11 +22,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Build site with version stamp
-        env:
-          VERSION: ${{ github.event.release.tag_name || 'dev' }}
         run: |
+          VERSION=$(git describe --tags --always)
           mkdir _site
           cp index.html _site/
           SHA=$(git rev-parse --short HEAD)
