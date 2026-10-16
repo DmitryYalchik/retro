@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Протокол итерации</title>
+<title>Ретро</title>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -249,12 +249,16 @@ button{cursor:pointer;background:none;border:0}
 }
 .fmt--b{font-family:Archivo,sans-serif;font-weight:700}
 .fmt--i{font-style:italic;font-family:"IBM Plex Sans",sans-serif}
+.fmt--s{text-decoration:line-through;font-family:"IBM Plex Sans",sans-serif}
+.fmt--move{font-family:"IBM Plex Sans",sans-serif;font-size:13px}
+.fmt--move:disabled{opacity:.45;cursor:default}
 .fmt:hover{background:var(--surface-2);color:var(--ink)}
 .fmt[aria-pressed="true"]{
   background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);
 }
 .ta.is-bold{font-weight:600}
 .ta.is-italic{font-style:italic}
+.ta.is-strike{text-decoration:line-through;color:var(--faint)}
 .sep{width:1px;height:16px;background:var(--line-soft);margin:0 2px}
 
 .block__foot{
@@ -345,7 +349,7 @@ button{cursor:pointer;background:none;border:0}
 </style>
 
 <div class="bar">
-  <h1>Протокол итерации</h1>
+  <h1>Ретро</h1>
   <span class="meta" id="stat"></span>
   <span class="spacer"></span>
   <span class="acts">
@@ -406,9 +410,22 @@ const GLYPHS = {
   "super-admin-green-dot":"🟢","super-admin-red-dot":"🔴","question":"❓","exclamation":"❗",
   "briefcase":"💼","performing_arts":"🎭","yandexdisk":"💽","white_check_mark":"✅",
   "fire":"🔥","warning":"⚠️","bulb":"💡","memo":"📝","calendar":"📅","rocket":"🚀",
-  "small":"🟩","medium":"🟨","large":"🟧","x-large":"🟥","ux":"🪄","bug":"🐞"
+  "small":"🟩","medium":"🟨","large":"🟧","x-large":"🟥","ux":"🪄","bug":"🐞",
+  "moneybag":"💰","brain":"🧠"
 };
 const uid = () => Math.random().toString(36).slice(2,9);
+
+const TAGS_REV = 2;
+function defaultTags(){
+  return [
+    {id:"s",     label:"S",     code:"small",      tone:"green"},
+    {id:"m",     label:"M",     code:"medium",     tone:"amber"},
+    {id:"l",     label:"L",     code:"large",      tone:"red"},
+    {id:"ux",    label:"UX",    code:"ux",         tone:"violet"},
+    {id:"zp",    label:"ЗП",    code:"moneybag",   tone:"blue"},
+    {id:"shturm",label:"ШТУРМ", code:"brain",      tone:"slate"}
+  ];
+}
 
 function sample(){
   const L = (type,sticker,title,tone,lines,after) => ({
@@ -419,12 +436,8 @@ function sample(){
     text:""
   });
   return {
-    tags:[
-      {id:"s",  label:"S",  code:"small",   tone:"green"},
-      {id:"m",  label:"M",  code:"medium",  tone:"amber"},
-      {id:"l",  label:"L",  code:"large",   tone:"red"},
-      {id:"ux", label:"UX", code:"ux",      tone:"violet"}
-    ],
+    tagsRev: TAGS_REV,
+    tags: defaultTags(),
     blocks:[
       L("list","super-admin-green-dot","ПЛЮСЫ","green",[]),
       L("list","super-admin-red-dot","МИНУСЫ","red",[]),
@@ -446,6 +459,10 @@ function sample(){
 const KEY = "protokol-iteracii-v1";
 let state = load() || sample();
 state.ui = state.ui || {md:false, tags:false};
+if((state.tagsRev || 1) < TAGS_REV){
+  defaultTags().forEach(t => { if(!state.tags.some(x => x.id === t.id)) state.tags.push(t); });
+  state.tagsRev = TAGS_REV;
+}
 
 function load(){
   try{ const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; }
@@ -467,6 +484,7 @@ function emphasize(it){
   let s = core;
   if(it.italic) s = "_" + s + "_";
   if(it.bold) s = "**" + s + "**";
+  if(it.strike) s = "~~" + s + "~~";
   return lead + s + tail;
 }
 
@@ -522,6 +540,14 @@ function renderOut(){
 }
 
 function grow(ta){ ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px"; }
+
+function textHeight(ta, text){
+  const value = ta.value, s = ta.selectionStart, e = ta.selectionEnd, h = ta.style.height;
+  ta.value = text; ta.style.height = "auto";
+  const height = ta.scrollHeight;
+  ta.value = value; ta.style.height = h; ta.setSelectionRange(s, e);
+  return height;
+}
 
 function tagOf(id){ return state.tags.find(t => t.id === id); }
 
@@ -696,6 +722,7 @@ function itemRow(b, it, ii){
   const syncStyle = () => {
     ta.classList.toggle("is-bold", !!it.bold);
     ta.classList.toggle("is-italic", !!it.italic);
+    ta.classList.toggle("is-strike", !!it.strike);
   };
   syncStyle();
   ta.rows = 1;
@@ -709,11 +736,20 @@ function itemRow(b, it, ii){
       renderBlocks();
       focusItem(b.id, ii + 1);
     }
-    if(e.key === "Backspace" && ta.value === "" && b.items.length > 1){
+    if((e.key === "ArrowUp" || e.key === "ArrowDown") &&
+       !e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey &&
+       ta.selectionStart === ta.selectionEnd){
+      const up = e.key === "ArrowUp";
+      const before = textHeight(ta, ta.value.slice(0, ta.selectionStart));
+      const edge = up ? before === textHeight(ta, "") : before === textHeight(ta, ta.value);
+      if(!edge) return;
+      const all = [...$blocks.querySelectorAll(".ta")];
+      const next = all[all.indexOf(ta) + (up ? -1 : 1)];
+      if(!next) return;
       e.preventDefault();
-      b.items.splice(ii, 1);
-      renderBlocks();
-      focusItem(b.id, Math.max(0, ii - 1));
+      next.focus();
+      const pos = up ? next.value.length : 0;
+      next.setSelectionRange(pos, pos);
     }
   });
 
@@ -722,7 +758,7 @@ function itemRow(b, it, ii){
 
   const fmtBtn = (kind, label, title) => {
     const btn = document.createElement("button");
-    btn.className = "fmt fmt--" + (kind === "bold" ? "b" : "i");
+    btn.className = "fmt fmt--" + {bold:"b", italic:"i", strike:"s"}[kind];
     btn.textContent = label;
     btn.title = title;
     btn.setAttribute("aria-label", title);
@@ -737,7 +773,8 @@ function itemRow(b, it, ii){
   };
   const bBtn = fmtBtn("bold", "Ж", "Жирная строка (Ctrl+B)");
   const iBtn = fmtBtn("italic", "К", "Курсивная строка (Ctrl+I)");
-  right.append(bBtn, iBtn);
+  const sBtn = fmtBtn("strike", "З", "Зачёркнутая строка (Ctrl+Shift+X)");
+  right.append(bBtn, iBtn, sBtn);
   const sep = document.createElement("span");
   sep.className = "sep";
   right.appendChild(sep);
@@ -747,6 +784,7 @@ function itemRow(b, it, ii){
     const k = e.key.toLowerCase();
     if(k === "b"){ e.preventDefault(); bBtn.click(); }
     if(k === "i"){ e.preventDefault(); iBtn.click(); }
+    if(k === "x" && e.shiftKey){ e.preventDefault(); sBtn.click(); }
   });
 
   state.tags.forEach(t => {
@@ -762,7 +800,7 @@ function itemRow(b, it, ii){
       const nowOn = !it.tags.includes(t.id);
       it.tags = nowOn ? [...it.tags, t.id] : it.tags.filter(x => x !== t.id);
       chip.setAttribute("aria-pressed", nowOn ? "true" : "false");
-      row.classList.add("open");
+      row.classList.remove("open");
       renderOut();
     };
     right.appendChild(chip);
@@ -776,6 +814,28 @@ function itemRow(b, it, ii){
   plus.onclick = () => row.classList.toggle("open");
   right.appendChild(plus);
 
+  const plans = isTitled(b, "идеи") && state.blocks.find(x => x.type === "list" && isTitled(x, "планы"));
+  if(plans){
+    const planned = !!(it.planId && plans.items.some(x => x.id === it.planId));
+    const move = document.createElement("button");
+    move.className = "fmt fmt--move";
+    move.textContent = "→";
+    move.title = planned ? "Уже в планах" : "Перенести в планы";
+    move.setAttribute("aria-label", move.title);
+    move.disabled = planned;
+    move.onclick = () => {
+      const copy = {id:uid(), text:it.text, tags:[...(it.tags||[])], bold:!!it.bold, italic:!!it.italic};
+      const last = plans.items[plans.items.length - 1];
+      if(last && !last.text.trim() && !(last.tags||[]).length) plans.items[plans.items.length - 1] = copy;
+      else plans.items.push(copy);
+      it.planId = copy.id;
+      it.strike = true;
+      renderBlocks();
+      toast("Перенесено в планы");
+    };
+    right.appendChild(move);
+  }
+
   const del = document.createElement("button");
   del.className = "icobtn icobtn--danger";
   del.textContent = "✕";
@@ -787,6 +847,8 @@ function itemRow(b, it, ii){
   row.append(handle, ta, right);
   return row;
 }
+
+function isTitled(b, title){ return (b.title || "").trim().toLowerCase() === title; }
 
 function focusItem(blockId, index){
   const bi = state.blocks.findIndex(x => x.id === blockId);
