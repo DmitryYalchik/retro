@@ -29,11 +29,12 @@ jobs:
         run: |
           VERSION=$(git describe --tags --always)
           mkdir _site
-          cp index.html _site/
+          cp index.html sw.js manifest.webmanifest icon.svg icon-192.png icon-512.png icon-maskable-512.png _site/
           SHA=$(git rev-parse --short HEAD)
           DATE=$(git log -1 --format=%cs)
-          sed -i "s/__BUILD_VERSION__/$VERSION/g; s/__BUILD_SHA__/$SHA/g; s/__BUILD_DATE__/$DATE/g" _site/index.html
+          sed -i "s/__BUILD_VERSION__/$VERSION/g; s/__BUILD_SHA__/$SHA/g; s/__BUILD_DATE__/$DATE/g" _site/index.html _site/sw.js
           grep -o "Версия [^<]*" _site/index.html
+          grep -o 'retro-[0-9a-f]*"' _site/sw.js
 
       - uses: actions/configure-pages@v5
 

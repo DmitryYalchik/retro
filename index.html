@@ -4,405 +4,630 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ретро</title>
+<meta name="description" content="Конспект ретро для Mattermost">
+<meta name="theme-color" content="#fdfcf9">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script>
+try{
+  const t = localStorage.getItem("retro-theme");
+  if(t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+}catch(e){}
+</script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap">
 <style>
 :root{
-  --ground:#e7ecee;
-  --surface:#fbfcfc;
-  --surface-2:#f1f4f5;
-  --ink:#16202a;
-  --muted:#5c6e7b;
-  --faint:#8a9aa5;
-  --line:#cdd7dc;
-  --line-soft:#dde5e8;
-  --accent:#186b66;
-  --accent-ink:#0e4c48;
-  --accent-wash:#dbeae8;
-  --t-green:#2e7d4f;
-  --t-red:#ae3b2b;
-  --t-amber:#8a6a1f;
-  --t-violet:#6f4ca0;
-  --t-blue:#1f5f8a;
-  --t-slate:#54666f;
-  --shadow:0 1px 2px rgba(22,32,42,.06), 0 8px 24px -18px rgba(22,32,42,.5);
-  --radius:3px;
+  --ground:#ecebe6;
+  --surface:#fdfcf9;
+  --surface-2:#f4f2ec;
+  --surface-3:#ebe8e0;
+  --ink:#1d1c19;
+  --muted:#66625a;
+  --faint:#9d988e;
+  --line:#dedad1;
+  --line-soft:#ebe8e1;
+  --accent:#2e55c9;
+  --accent-ink:#2445a6;
+  --accent-wash:#e6ecfb;
+  --t-green:#2f7a4a;
+  --t-red:#b23b2a;
+  --t-amber:#94680e;
+  --t-violet:#6c48a8;
+  --t-blue:#2a5f9e;
+  --t-slate:#5b6670;
+  --tint:12%;
+  --shadow:0 1px 2px rgba(29,28,25,.05), 0 12px 32px -22px rgba(29,28,25,.45);
+  --scrim:rgba(29,28,25,.3);
+  --radius:6px;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#12181d;
-    --surface:#1a2228;
-    --surface-2:#212b32;
-    --ink:#e3eaee;
-    --muted:#9aacb6;
-    --faint:#6d7f8a;
-    --line:#2f3b44;
-    --line-soft:#273239;
-    --accent:#48a7a0;
-    --accent-ink:#7fc8c2;
-    --accent-wash:#1b3a38;
-    --t-green:#5cb37c;
-    --t-red:#e07a67;
-    --t-amber:#c9a353;
-    --t-violet:#a98adb;
-    --t-blue:#5b9dcd;
-    --t-slate:#8ba0aa;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px #000;
+    --ground:#121211;
+    --surface:#1b1a18;
+    --surface-2:#23221f;
+    --surface-3:#2c2a27;
+    --ink:#ebe9e3;
+    --muted:#a6a197;
+    --faint:#716d65;
+    --line:#34322e;
+    --line-soft:#2a2825;
+    --accent:#7f9ef0;
+    --accent-ink:#a3b9f5;
+    --accent-wash:#222b44;
+    --t-green:#6cc08a;
+    --t-red:#ec8573;
+    --t-amber:#d8ac58;
+    --t-violet:#b496ec;
+    --t-blue:#72a9e6;
+    --t-slate:#9aa6b0;
+    --tint:18%;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -24px #000;
+    --scrim:rgba(0,0,0,.55);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#12181d;
-  --surface:#1a2228;
-  --surface-2:#212b32;
-  --ink:#e3eaee;
-  --muted:#9aacb6;
-  --faint:#6d7f8a;
-  --line:#2f3b44;
-  --line-soft:#273239;
-  --accent:#48a7a0;
-  --accent-ink:#7fc8c2;
-  --accent-wash:#1b3a38;
-  --t-green:#5cb37c;
-  --t-red:#e07a67;
-  --t-amber:#c9a353;
-  --t-violet:#a98adb;
-  --t-blue:#5b9dcd;
-  --t-slate:#8ba0aa;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px #000;
+  --ground:#121211;
+  --surface:#1b1a18;
+  --surface-2:#23221f;
+  --surface-3:#2c2a27;
+  --ink:#ebe9e3;
+  --muted:#a6a197;
+  --faint:#716d65;
+  --line:#34322e;
+  --line-soft:#2a2825;
+  --accent:#7f9ef0;
+  --accent-ink:#a3b9f5;
+  --accent-wash:#222b44;
+  --t-green:#6cc08a;
+  --t-red:#ec8573;
+  --t-amber:#d8ac58;
+  --t-violet:#b496ec;
+  --t-blue:#72a9e6;
+  --t-slate:#9aa6b0;
+  --tint:18%;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -24px #000;
+  --scrim:rgba(0,0,0,.55);
   color-scheme:dark;
 }
 
 *{box-sizing:border-box}
+html,body{margin:0}
 body{
   background:var(--ground);
   color:var(--ink);
   font-family:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
-  font-size:14px;
-  line-height:1.5;
+  font-size:15px;
+  line-height:1.55;
   -webkit-font-smoothing:antialiased;
 }
+body.locked{overflow:hidden}
 button,input,textarea{font:inherit;color:inherit}
-button{cursor:pointer;background:none;border:0}
-:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button{cursor:pointer;background:none;border:0;padding:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
 
-/* ---------- top bar ---------- */
-.bar{
-  position:sticky;top:0;z-index:20;
-  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
-  padding:14px 22px;
-  background:var(--surface);
-  border-bottom:1px solid var(--line);
+.page{max-width:860px;margin:0 auto;padding:0 24px}
+
+.bar{display:flex;align-items:center;gap:14px;padding:22px 0 16px}
+.brand{
+  margin:0;font-size:17px;font-weight:700;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:9px;
 }
-.bar h1{
-  margin:0;
-  font-family:Archivo,"Archivo Narrow","IBM Plex Sans",sans-serif;
-  font-weight:700;font-size:19px;letter-spacing:-.015em;
+.brand::before{
+  content:"";width:10px;height:10px;border-radius:2px;
+  background:var(--accent);transform:rotate(45deg);
 }
-.bar .meta{color:var(--faint);font-size:12px;font-family:"IBM Plex Mono",monospace}
-.bar .spacer{flex:1 1 auto}
-.bar .acts{display:flex;gap:8px;align-self:center}
+.saved{color:var(--faint);font-size:12.5px;white-space:nowrap;transition:color .3s}
+.saved.flash{color:var(--accent-ink)}
+.saved.bad{color:var(--t-red)}
+.spacer{flex:1 1 auto}
+.acts{display:flex;gap:8px;align-items:center;position:relative}
 
 .btn{
   border:1px solid var(--line);
-  background:var(--surface-2);
-  padding:6px 12px;border-radius:var(--radius);
-  font-size:13px;font-weight:500;
+  background:var(--surface);
+  padding:7px 14px;border-radius:var(--radius);
+  font-size:13.5px;font-weight:500;white-space:nowrap;
   transition:border-color .12s, background .12s, color .12s;
 }
-.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
-.btn--primary{
-  background:var(--accent);border-color:var(--accent);
-  color:#fff;font-weight:600;
-}
-.btn--primary:hover{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff}
-.btn--ghost{background:transparent;border-color:transparent;color:var(--muted)}
-.btn--ghost:hover{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
-.btn--sm{padding:3px 9px;font-size:12px}
+.btn:hover{border-color:var(--faint)}
+.btn--primary{background:var(--ink);border-color:var(--ink);color:var(--surface);font-weight:600}
+.btn--primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn--sm{padding:4px 10px;font-size:12.5px}
+.btn--icon{width:36px;padding:7px 0;text-align:center;font-size:16px;line-height:1.2}
+.btn--theme{display:grid;place-items:center;height:36px;color:var(--muted)}
+.btn--theme:hover{color:var(--ink)}
+.btn--theme svg{width:17px;height:17px;display:block}
 
-/* ---------- layout ---------- */
-.wrap{
-  display:flex;flex-direction:column;gap:22px;
-  padding:22px;
-  max-width:1060px;margin:0 auto;
-}
-.editor{display:flex;flex-direction:column;gap:14px;min-width:0}
-.bottom{display:flex;flex-direction:column;gap:12px;min-width:0}
-
-/* ---------- block card ---------- */
-.block{
+.menu{
+  position:absolute;right:0;top:calc(100% + 6px);z-index:30;
+  min-width:290px;padding:6px;
   background:var(--surface);
-  border:1px solid var(--line-soft);
-  border-left:3px solid var(--tone,var(--t-slate));
-  border-radius:var(--radius);
+  border:1px solid var(--line);border-radius:var(--radius);
   box-shadow:var(--shadow);
+  display:flex;flex-direction:column;
 }
-.block__head{
-  display:flex;align-items:center;gap:8px;
-  padding:9px 10px 9px 12px;
-  border-bottom:1px solid var(--line-soft);
+.menu[hidden]{display:none}
+.menu button{
+  display:flex;justify-content:space-between;gap:16px;
+  text-align:left;padding:8px 10px;border-radius:4px;font-size:14px;
 }
-.glyph{
-  flex:none;width:26px;height:26px;border-radius:var(--radius);
-  display:grid;place-items:center;font-size:15px;
-  background:var(--surface-2);border:1px solid var(--line-soft);
-}
-.i-title{
-  flex:1 1 auto;min-width:60px;
-  border:1px solid transparent;background:transparent;
-  padding:3px 6px;border-radius:var(--radius);
-  font-family:Archivo,"IBM Plex Sans",sans-serif;
-  font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
-}
-.i-code,.i-after{
-  border:1px solid transparent;background:transparent;
-  padding:3px 6px;border-radius:var(--radius);
-  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);
-}
-.i-code{width:20ch;flex:none}
-.i-after{width:11ch;flex:none}
-.i-title:hover,.i-code:hover,.i-after:hover{background:var(--surface-2)}
-.i-title:focus,.i-code:focus,.i-after:focus{background:var(--surface-2);border-color:var(--line);outline:none}
-.i-code::placeholder,.i-after::placeholder{color:var(--faint)}
+.menu button:hover,.menu button:focus-visible{background:var(--surface-2)}
+.menu kbd{font:11.5px "IBM Plex Mono",monospace;color:var(--faint)}
+.menu hr{border:0;border-top:1px solid var(--line-soft);margin:5px 2px}
 
-.tone-dot{
-  flex:none;width:16px;height:16px;border-radius:50%;
-  background:var(--tone,var(--t-slate));
-  border:2px solid var(--surface);
-  box-shadow:0 0 0 1px var(--line);
+.sheet{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
+  min-height:60vh;
+  display:flex;flex-direction:column;
 }
-.head-tools{display:flex;gap:2px;align-items:center;flex:none}
-.icobtn{
-  width:24px;height:24px;border-radius:var(--radius);
-  display:grid;place-items:center;color:var(--faint);
-  font-size:13px;line-height:1;
+.tabs{
+  position:sticky;top:0;z-index:10;
+  display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
+  padding:0 20px;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  border-radius:10px 10px 0 0;
 }
-.icobtn:hover{background:var(--surface-2);color:var(--ink)}
-.icobtn--danger:hover{background:var(--surface-2);color:var(--t-red)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:none;display:flex;align-items:center;gap:7px;
+  padding:14px 10px 13px;
+  color:var(--muted);
+  font-size:12.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  box-shadow:inset 0 -2px 0 transparent;
+  transition:color .12s, box-shadow .12s;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--tone,var(--ink))}
+.tab__dot{width:7px;height:7px;border-radius:50%;background:var(--tone,var(--faint))}
+.tab__n{font:500 11px "IBM Plex Mono",monospace;color:var(--faint);letter-spacing:0}
+.tab__n:empty{display:none}
 
-/* ---------- items ---------- */
-.items{display:flex;flex-direction:column;padding:4px 0}
+.section{padding:30px 48px 36px 64px;flex:1 1 auto}
+.section__head{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+.section__glyph{font-size:20px;line-height:1;align-self:center}
+.section__title{margin:0;font-size:24px;font-weight:700;letter-spacing:-.015em;line-height:1.2}
+.section__after{color:var(--faint);font:13px "IBM Plex Mono",monospace}
+.section__count{margin-left:auto;color:var(--faint);font-size:13px;white-space:nowrap}
+
+.items{display:flex;flex-direction:column}
 .item{
+  position:relative;
   display:grid;
-  grid-template-columns:22px minmax(0,1fr) auto;
-  align-items:start;gap:6px;
-  padding:4px 8px 4px 4px;
-  border-top:1px solid transparent;
-  border-bottom:1px solid transparent;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:start;gap:8px;
+  padding:3px 6px 3px 0;
+  border-radius:var(--radius);
+  border-top:2px solid transparent;
+  border-bottom:2px solid transparent;
 }
-.item + .item{border-top-color:var(--line-soft)}
+.item:hover,.item:focus-within{background:var(--surface-2)}
 .item.drop-above{border-top-color:var(--accent)}
 .item.drop-below{border-bottom-color:var(--accent)}
 .item.dragging{opacity:.35}
 .handle{
-  width:22px;height:26px;border-radius:var(--radius);
+  position:absolute;left:-50px;top:5px;
+  width:22px;height:26px;border-radius:4px;
   display:grid;place-items:center;
   color:var(--faint);cursor:grab;
   font-size:13px;line-height:1;
+  opacity:0;transition:opacity .12s;
 }
-.handle:hover{background:var(--surface-2);color:var(--ink)}
+.item:hover .handle,.handle:focus-visible{opacity:1}
+.handle:hover{color:var(--ink)}
 .handle:active{cursor:grabbing}
+.line{display:flex;align-items:flex-start;gap:8px;min-width:0;padding-left:8px}
 .ta{
-  width:100%;resize:none;overflow:hidden;
-  border:1px solid transparent;border-radius:var(--radius);
-  background:transparent;
-  padding:4px 6px;
-  min-height:26px;line-height:1.45;
+  flex:1 1 auto;min-width:0;
+  resize:none;overflow:hidden;
+  border:0;background:transparent;
+  padding:5px 0;
+  min-height:34px;line-height:1.55;
 }
-.ta:hover{background:var(--surface-2)}
-.ta:focus{background:var(--surface-2);border-color:var(--line);outline:none}
-.item__right{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-top:3px;justify-content:flex-end}
-
-.chip{
-  font-family:"IBM Plex Mono",monospace;
-  font-size:11px;font-weight:500;letter-spacing:.03em;
-  padding:2px 7px;border-radius:999px;
-  border:1px solid var(--chip,var(--t-slate));
-  color:var(--chip,var(--t-slate));
-  background:transparent;
-  transition:background .12s,color .12s;
-}
-.chip[aria-pressed="true"]{background:var(--chip,var(--t-slate));color:var(--surface);border-color:var(--chip)}
-:root[data-theme="dark"] .chip[aria-pressed="true"],
-:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#10171c}
-.chip:hover{opacity:.8}
-.item:not(.open) .chip[aria-pressed="false"]{display:none}
-.plus{
-  width:20px;height:20px;border-radius:50%;padding:0;
-  display:flex;align-items:center;justify-content:center;
-  border:1px dashed var(--line);color:var(--faint);
-}
-.plus svg{display:block;width:9px;height:9px}
-.plus:hover{border-style:solid;border-color:var(--accent);color:var(--accent-ink)}
-.item.open .plus{background:var(--accent-wash);border-style:solid;border-color:var(--accent);color:var(--accent-ink)}
-
-/* bold / italic */
-.fmt{
-  width:22px;height:20px;border-radius:var(--radius);
-  display:flex;align-items:center;justify-content:center;
-  border:1px solid transparent;color:var(--faint);
-  font-size:12.5px;line-height:1;
-}
-.fmt--b{font-family:Archivo,sans-serif;font-weight:700}
-.fmt--i{font-style:italic;font-family:"IBM Plex Sans",sans-serif}
-.fmt--s{text-decoration:line-through;font-family:"IBM Plex Sans",sans-serif}
-.fmt--move{font-family:"IBM Plex Sans",sans-serif;font-size:13px}
-.fmt--move:disabled{opacity:.45;cursor:default}
-.fmt:hover{background:var(--surface-2);color:var(--ink)}
-.fmt[aria-pressed="true"]{
-  background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);
-}
-.ta.is-bold{font-weight:600}
+.ta:focus{outline:none}
+.ta::placeholder{color:var(--faint)}
+.ta.is-bold{font-weight:700}
 .ta.is-italic{font-style:italic}
 .ta.is-strike{text-decoration:line-through;color:var(--faint)}
-.sep{width:1px;height:16px;background:var(--line-soft);margin:0 2px}
 
-.block__foot{
-  display:flex;gap:6px;align-items:center;
-  padding:6px 10px 8px 12px;
-  border-top:1px solid var(--line-soft);
+.tagbtn{
+  flex:none;display:flex;flex-wrap:wrap;gap:4px;align-items:center;
+  margin-top:6px;min-height:22px;border-radius:4px;
 }
+.tag{
+  display:inline-flex;align-items:center;
+  height:22px;padding:0 7px;border-radius:4px;
+  font:600 11px "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--tag,var(--t-slate));
+  background:color-mix(in srgb, var(--tag,var(--t-slate)) var(--tint), transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--tag,var(--t-slate)) 28%, transparent);
+  white-space:nowrap;
+}
+.tagbtn:hover .tag{box-shadow:inset 0 0 0 1px var(--tag,var(--t-slate))}
+.tagbtn--empty{
+  position:absolute;left:-24px;top:3px;
+  width:22px;justify-content:center;background:var(--surface);
+  color:var(--faint);border:1px dashed var(--line);
+  opacity:0;transition:opacity .12s;
+  font-size:14px;line-height:1;
+}
+.item:hover .tagbtn--empty,.item:focus-within .tagbtn--empty,.tagbtn--empty:focus-visible,.tagbtn--empty[aria-expanded="true"]{opacity:1}
+.tagbtn--empty:hover{color:var(--accent);border-color:var(--accent)}
+
+.tools{display:flex;align-items:center;gap:1px;padding-top:6px;opacity:0;transition:opacity .12s}
+.item:hover .tools,.item:focus-within .tools{opacity:1}
+@media (hover:none){.tagbtn--empty{opacity:1}}
+.tool{
+  width:26px;height:24px;border-radius:4px;
+  display:grid;place-items:center;
+  color:var(--faint);font-size:13px;line-height:1;
+}
+.tool:hover{background:var(--surface-3);color:var(--ink)}
+.tool[aria-pressed="true"]{background:var(--accent-wash);color:var(--accent-ink)}
+.tool--b{font-weight:700}
+.tool--i{font-style:italic;font-family:Georgia,serif}
+.tool--s{text-decoration:line-through}
+.tool--del:hover{color:var(--t-red)}
+.tool:disabled{opacity:.35;cursor:default;background:none}
+.tool--move{font-size:14px}
+.sep{width:1px;height:14px;background:var(--line);margin:0 4px}
+
+.add-item{
+  display:flex;align-items:center;gap:8px;width:100%;
+  margin-top:4px;padding:7px 8px;border-radius:var(--radius);
+  color:var(--faint);text-align:left;
+}
+.add-item:hover{background:var(--surface-2);color:var(--muted)}
+.add-item kbd{margin-left:auto;font:11px "IBM Plex Mono",monospace;color:var(--faint);opacity:0}
+.add-item:hover kbd{opacity:1}
 .raw-ta{
-  width:100%;resize:vertical;min-height:70px;
-  border:1px solid var(--line-soft);border-radius:var(--radius);
+  display:block;width:100%;resize:vertical;min-height:120px;
+  border:1px solid var(--line);border-radius:var(--radius);
   background:var(--surface-2);
-  padding:8px 10px;margin:8px;width:calc(100% - 16px);
-  font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.6;
+  padding:12px 14px;
+  font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.65;
 }
-.raw-ta:focus{border-color:var(--line);outline:none}
+.raw-ta:focus{border-color:var(--faint);outline:none}
 
-/* ---------- side panels ---------- */
-.panel{
+.pop{
+  position:fixed;z-index:50;
+  min-width:200px;padding:6px;
   background:var(--surface);
-  border:1px solid var(--line-soft);
-  border-radius:var(--radius);
+  border:1px solid var(--line);border-radius:8px;
   box-shadow:var(--shadow);
-  min-width:0;
+  display:flex;flex-direction:column;gap:1px;
 }
-.panel__head{
+.pop[hidden]{display:none}
+.pop__opt{
   display:flex;align-items:center;gap:10px;
-  padding:9px 12px;border-bottom:1px solid var(--line-soft);
+  padding:6px 8px;border-radius:4px;text-align:left;
 }
-.panel--closed .panel__head{border-bottom-color:transparent}
-.panel--closed .panel__body{display:none}
-.panel__toggle{
-  display:flex;align-items:center;gap:8px;flex:1 1 auto;
-  padding:0;text-align:left;color:var(--muted);
+.pop__opt:hover,.pop__opt:focus-visible{background:var(--surface-2);outline:none}
+.pop__box{
+  width:15px;height:15px;border-radius:3px;flex:none;
+  border:1.5px solid var(--line);display:grid;place-items:center;
+  font-size:10px;line-height:1;color:transparent;
 }
-.panel__toggle:hover{color:var(--ink)}
-.panel__toggle h2{
-  margin:0;
-  font-family:Archivo,"IBM Plex Sans",sans-serif;
-  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:inherit;
-}
-.caret{
-  flex:none;font-size:10px;line-height:1;color:var(--faint);
-  transition:transform .15s;transform:rotate(90deg);
-}
-.panel--closed .caret{transform:rotate(0deg)}
-.panel__note{color:var(--faint);font-size:11.5px;font-family:"IBM Plex Mono",monospace}
-.out{
-  margin:0;padding:12px 14px;
-  max-height:62vh;overflow:auto;
-  font-family:"IBM Plex Mono",monospace;
-  font-size:12.5px;line-height:1.65;
-  white-space:pre-wrap;word-break:break-word;
-  tab-size:4;
-}
-.out .h{color:var(--accent-ink);font-weight:500}
-.out .b{color:var(--faint)}
-.out .s{color:var(--t-violet)}
-.out .st{color:var(--ink);font-weight:500}
+.pop__opt[aria-checked="true"] .pop__box{background:var(--tag);border-color:var(--tag);color:var(--surface)}
+.pop__key{margin-left:auto;font:11px "IBM Plex Mono",monospace;color:var(--faint)}
+.pop hr{border:0;border-top:1px solid var(--line-soft);margin:4px 2px}
+.pop__more{padding:6px 8px;border-radius:4px;text-align:left;color:var(--muted);font-size:13px}
+.pop__more:hover{background:var(--surface-2);color:var(--ink)}
 
-.tags{display:flex;flex-direction:column;gap:6px;padding:10px 12px}
-.tagrow{display:grid;grid-template-columns:7ch minmax(0,1fr) 18px 24px;gap:6px;align-items:center}
-.tagrow input{
-  border:1px solid var(--line-soft);background:var(--surface-2);
-  border-radius:var(--radius);padding:4px 7px;
-  font-family:"IBM Plex Mono",monospace;font-size:12px;
+.tool svg{width:15px;height:15px;display:block}
+.ring{display:block;transform:rotate(-90deg)}
+.ring__bg{fill:none;stroke:var(--line)}
+.ring__fg{fill:none;stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset .25s linear}
+.over .ring__fg{stroke:var(--t-red)}
+.tbadge{
+  display:flex;align-items:center;gap:6px;
+  margin-top:5px;height:26px;padding:0 9px 0 5px;border-radius:13px;
+  background:var(--accent-wash);color:var(--accent-ink);
+  font:600 12.5px "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  white-space:nowrap;
 }
-.tagrow input:focus{border-color:var(--accent);outline:none}
-.swatch{
-  width:18px;height:18px;border-radius:50%;border:1px solid var(--line);
-  background:var(--chip);
+.tbadge:hover{box-shadow:inset 0 0 0 1px var(--accent)}
+.tbadge.paused{background:var(--surface-3);color:var(--muted)}
+.tbadge.paused .ring__fg{stroke:var(--faint)}
+.tbadge.over{
+  background:color-mix(in srgb, var(--t-red) var(--tint), transparent);color:var(--t-red);
+  animation:pulse 1.2s ease-in-out infinite;
 }
-.hint{
-  padding:0 12px 11px;color:var(--faint);font-size:12px;line-height:1.5;
+@keyframes pulse{50%{box-shadow:0 0 0 4px color-mix(in srgb, var(--t-red) 22%, transparent)}}
+
+.tpop{
+  position:fixed;z-index:50;width:250px;padding:14px;
+  background:var(--surface);
+  border:1px solid var(--line);border-radius:10px;
+  box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:12px;
 }
+.tpop[hidden]{display:none}
+.tpop__title{margin:0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tpop__what{margin:-6px 0 0;color:var(--faint);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.presets{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.pre{
+  height:34px;border-radius:6px;border:1px solid var(--line);
+  font:600 13px "IBM Plex Mono",monospace;
+}
+.pre:hover{border-color:var(--faint)}
+.pre[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.custom{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.custom input{
+  width:64px;height:32px;padding:0 8px;border-radius:6px;
+  border:1px solid var(--line);background:var(--surface-2);
+  font:600 13px "IBM Plex Mono",monospace;
+}
+.custom input:focus{border-color:var(--accent);outline:none}
+.tpop .btn{width:100%;padding:9px 14px}
+.tpop__note{margin:0;color:var(--faint);font-size:12px;line-height:1.45}
+.clock{position:relative;width:150px;height:150px;margin:2px auto 0}
+.clock__time{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font:600 32px "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+}
+.clock__sub{
+  position:absolute;left:0;right:0;bottom:38px;text-align:center;
+  color:var(--faint);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+}
+.over .clock__time,.over .clock__sub{color:var(--t-red)}
+.tctl{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.tctl .btn{padding:7px 0}
+
+.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim)}
+.ask{
+  width:min(380px,calc(100vw - 32px));padding:20px 20px 16px;
+  background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-radius:10px;
+  box-shadow:var(--shadow);
+}
+.ask::backdrop{background:var(--scrim)}
+.ask p{margin:0 0 18px;font-size:15px;line-height:1.5}
+.ask__btns{display:flex;justify-content:flex-end;gap:8px}
+.keys{width:min(460px,calc(100vw - 32px))}
+.keys h2{margin:0 0 14px;font-size:17px;font-weight:700}
+.keys dl{display:grid;grid-template-columns:auto 1fr;gap:9px 18px;margin:0 0 18px;font-size:14px}
+.keys dt{white-space:nowrap;color:var(--muted)}
+.keys dd{margin:0}
+.keys kbd{
+  display:inline-block;min-width:22px;padding:1px 6px;border-radius:4px;
+  border:1px solid var(--line);border-bottom-width:2px;background:var(--surface-2);
+  font:500 12px "IBM Plex Mono",monospace;text-align:center;color:var(--ink);
+}
+.btn--danger{background:var(--t-red);border-color:var(--t-red);color:#fff;font-weight:600}
+.btn--danger:hover{filter:brightness(1.08);border-color:var(--t-red)}
+.scrim[hidden]{display:none}
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:41;
+  width:min(560px,100vw);
+  display:flex;flex-direction:column;
+  background:var(--surface);
+  border-left:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.drawer[hidden]{display:none}
+.drawer__head{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 18px 16px 26px;
+  border-bottom:1px solid var(--line);
+}
+.drawer__head h2{margin:0;font-size:18px;font-weight:700}
+.drawer__body{flex:1 1 auto;overflow:auto;padding:20px 26px 30px;display:flex;flex-direction:column;gap:26px}
+.drawer section{display:flex;flex-direction:column;gap:10px}
+.drawer h3{margin:0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hint{margin:0;color:var(--faint);font-size:13px;line-height:1.5}
 .hint code{font-family:"IBM Plex Mono",monospace;color:var(--muted)}
 
+.tb{
+  border:1px solid var(--line);
+  border-left:3px solid var(--tone,var(--t-slate));
+  border-radius:var(--radius);
+  padding:10px 12px 12px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.tb__head{display:flex;align-items:center;gap:6px}
+.tb__type{color:var(--faint);font:11.5px "IBM Plex Mono",monospace;white-space:nowrap;margin:0 4px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field span{color:var(--faint);font-size:12px}
+.fields{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,.8fr);gap:10px}
+.inp{
+  width:100%;
+  border:1px solid var(--line);background:var(--surface-2);
+  border-radius:4px;padding:5px 8px;font-size:14px;
+}
+.inp:focus{border-color:var(--accent);outline:none}
+.inp--mono{font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+.inp--title{flex:1 1 auto;min-width:0;font-weight:600}
+.inp--tag{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+textarea.inp{resize:vertical;min-height:62px;line-height:1.5}
+.swatch{
+  flex:none;width:18px;height:18px;border-radius:50%;
+  border:2px solid var(--surface);
+  box-shadow:0 0 0 1px var(--line);
+  background:var(--chip);
+}
+.adds{display:flex;gap:8px;flex-wrap:wrap}
+.tags{display:flex;flex-direction:column;gap:6px}
+.tagrow{display:grid;grid-template-columns:minmax(0,1fr) 84px 18px 26px;gap:10px;align-items:center}
+.tagrow .tag{justify-self:start;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+
 .toast{
-  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);
-  background:var(--ink);color:var(--ground);
-  padding:7px 16px;border-radius:999px;
-  font-size:13px;font-weight:500;
+  position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(8px);
+  display:flex;align-items:center;gap:14px;
+  background:var(--ink);color:var(--surface);
+  padding:8px 16px;border-radius:999px;
+  font-size:13.5px;font-weight:500;white-space:nowrap;
   opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
-  z-index:50;
+  z-index:60;
 }
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.on.act{pointer-events:auto}
+.toast button{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.toast kbd{font:11px "IBM Plex Mono",monospace;opacity:.6}
+
+.quick{
+  position:sticky;bottom:0;z-index:9;
+  display:flex;align-items:center;gap:10px;
+  padding:12px 20px 12px 24px;
+  background:var(--surface);
+  border-top:1px solid var(--line);
+  border-radius:0 0 10px 10px;
+}
+.quick:focus-within{box-shadow:0 -10px 24px -18px rgba(0,0,0,.35)}
+.quick__to{
+  flex:none;display:flex;align-items:center;gap:7px;
+  padding:5px 10px;border-radius:999px;
+  background:var(--surface-2);color:var(--muted);
+  font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  white-space:nowrap;max-width:40%;overflow:hidden;text-overflow:ellipsis;
+  transition:background .15s,color .15s;
+}
+.quick__to.moved{background:color-mix(in srgb, var(--tone) var(--tint), transparent);color:var(--tone)}
+.quick__to.none{color:var(--t-red)}
+.quick__in{
+  flex:1 1 auto;min-width:0;height:36px;
+  border:0;background:transparent;font-size:15px;
+}
+.quick__in:focus{outline:none}
+.quick__in::placeholder{color:var(--faint)}
+.quick__key{flex:none;font:11px "IBM Plex Mono",monospace;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+.quick__tags{display:flex;gap:4px;flex:none}
+.item.fresh{animation:fresh 1.2s ease-out}
+@keyframes fresh{from{background:var(--accent-wash)}}
+.build{text-align:center;margin:0 0 22px;color:var(--faint);font:11px "IBM Plex Mono",monospace}
+
+@media (max-width:640px){
+  .page{padding:0}
+  .bar{padding:14px 16px 12px}
+  .saved{display:none}
+  .btn--copy-long{display:none}
+  .sheet{border-radius:0;border-left:0;border-right:0}
+  .tabs{border-radius:0;padding:0 8px}
+  .section{padding:22px 16px 28px 42px}
+  .section__title{font-size:21px}
+  .handle{display:none}
+  .item{grid-template-columns:minmax(0,1fr) auto;gap:0 6px}
+  .tools{display:none;opacity:1;padding:0 0 4px 8px;grid-column:1 / -1;order:3}
+  .item:focus-within .tools{display:flex}
+  .fields{grid-template-columns:minmax(0,1fr)}
+  .quick{padding:10px 12px;border-radius:0}
+  .quick__key{display:none}
+  .drawer__body{padding:16px}
+}
+@media (min-width:641px){.btn--copy-short{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
-<div class="bar">
-  <h1>Ретро</h1>
-  <span class="meta" id="stat"></span>
-  <span class="spacer"></span>
-  <span class="acts">
-    <button class="btn btn--ghost btn--sm" id="reset">Сбросить к шаблону</button>
-    <button class="btn btn--ghost btn--sm" id="clear">Очистить</button>
-    <button class="btn btn--primary" id="copy">Скопировать Markdown</button>
-  </span>
-</div>
-
-<div class="wrap">
-  <div class="editor">
-    <div id="blocks"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn" data-add="list">+ Блок со списком</button>
-      <button class="btn" data-add="quote">+ Блок-цитата</button>
-      <button class="btn" data-add="raw">+ Свободный Markdown</button>
+<div class="page">
+  <header class="bar">
+    <h1 class="brand">Ретро</h1>
+    <span class="saved" id="saved"></span>
+    <span class="spacer"></span>
+    <div class="acts">
+      <button class="btn btn--icon btn--theme" id="theme"></button>
+      <button class="btn btn--primary" id="copy" title="Ctrl+Shift+C">
+        <span class="btn--copy-long">Скопировать в Mattermost</span><span class="btn--copy-short">Копировать</span>
+      </button>
+      <button class="btn btn--icon" id="menubtn" aria-haspopup="true" aria-expanded="false" aria-controls="menu" title="Ещё">⋯</button>
+      <div class="menu" id="menu" role="menu" hidden>
+        <button role="menuitem" data-m="new">Новое ретро</button>
+        <hr>
+        <button role="menuitem" data-m="template">Шаблон: разделы и теги</button>
+        <hr>
+        <button role="menuitem" data-m="copy">Скопировать Markdown <kbd>Ctrl+Shift+C</kbd></button>
+        <button role="menuitem" data-m="keys">Горячие клавиши <kbd>?</kbd></button>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <div class="bottom">
-    <section class="panel panel--closed" id="panel-md">
-      <div class="panel__head">
-        <button class="panel__toggle" data-toggle="md" aria-expanded="false" aria-controls="md-body">
-          <span class="caret">▶</span>
-          <h2>Markdown</h2>
-          <span class="panel__note" id="stat2"></span>
-        </button>
-        <button class="btn btn--sm" id="copy2">Скопировать</button>
-      </div>
-      <div class="panel__body" id="md-body">
-        <pre class="out" id="out"></pre>
-      </div>
-    </section>
+  <main class="sheet">
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Разделы"></nav>
+    <section class="section" id="section" role="tabpanel"></section>
+    <form class="quick" id="quick" autocomplete="off">
+      <span class="quick__to" id="quick-to" aria-live="polite"><span class="tab__dot"></span><span></span></span>
+      <span class="quick__tags" id="quick-tags"></span>
+      <input class="quick__in" id="quick-in" aria-label="Быстрая запись" enterkeyhint="send">
+      <kbd class="quick__key">/</kbd>
+    </form>
+  </main>
 
-    <section class="panel panel--closed" id="panel-tags">
-      <div class="panel__head">
-        <button class="panel__toggle" data-toggle="tags" aria-expanded="false" aria-controls="tags-body">
-          <span class="caret">▶</span>
-          <h2>Стикеры записей</h2>
-          <span class="panel__note" id="tagnote"></span>
-        </button>
-        <button class="btn btn--sm" id="addtag">+ Стикер</button>
-      </div>
-      <div class="panel__body" id="tags-body">
-        <div class="tags" id="tags"></div>
-        <p class="hint">Слева — подпись на кнопке, справа — код, который уйдёт в Markdown перед текстом записи. Подчёркивания экранируются сами: <code>:performing_arts:</code> → <code>:performing\_arts:</code></p>
-      </div>
-    </section>
-  </div>
+  <p class="build">Версия __BUILD_VERSION__ · __BUILD_SHA__ · __BUILD_DATE__</p>
 </div>
 
-<p class="build" style="text-align:center;margin:0 0 22px;color:var(--faint);font:11px 'IBM Plex Mono',monospace">Версия __BUILD_VERSION__ · __BUILD_SHA__ · __BUILD_DATE__</p>
-<div class="toast" id="toast"></div>
+<div class="pop" id="pop" role="menu" aria-label="Теги" hidden></div>
+<div class="tpop" id="tpop" role="dialog" aria-label="Таймер" hidden></div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+  <div class="drawer__head">
+    <h2 id="drawer-title">Шаблон</h2>
+    <span class="spacer"></span>
+    <button class="tool" id="drawer-close" title="Закрыть (Esc)" aria-label="Закрыть шаблон">✕</button>
+  </div>
+  <div class="drawer__body">
+    <section>
+      <h3>Разделы</h3>
+      <p class="hint">Порядок, названия и коды разделов меняются сразу. Строки и текст по умолчанию попадут в следующее новое ретро.</p>
+      <div id="tpl-blocks" style="display:flex;flex-direction:column;gap:10px"></div>
+      <div class="adds">
+        <button class="btn btn--sm" data-add="list">+ Раздел со списком</button>
+        <button class="btn btn--sm" data-add="quote">+ Раздел-цитата</button>
+        <button class="btn btn--sm" data-add="raw">+ Свободный Markdown</button>
+      </div>
+    </section>
+    <section>
+      <h3>Теги</h3>
+      <p class="hint">Тег — слово, которое уходит в Mattermost текстом в начале записи: <code>\[ ШТУРМ | UX | L \]</code>. В скобках теги идут в том порядке, в каком их ставили. Цифры 1–9 в списке тегов — по порядку отсюда.</p>
+      <div class="tags" id="tags"></div>
+      <div class="adds"><button class="btn btn--sm" id="addtag">+ Тег</button></div>
+    </section>
+  </div>
+</aside>
+
+<dialog class="ask" id="ask" aria-labelledby="ask-text">
+  <form method="dialog">
+    <p id="ask-text"></p>
+    <div class="ask__btns">
+      <button class="btn" value="cancel">Отмена</button>
+      <button class="btn btn--danger" value="ok" id="ask-ok">Удалить</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="ask keys" id="keys" aria-labelledby="keys-title">
+  <form method="dialog">
+    <h2 id="keys-title">Горячие клавиши</h2>
+    <dl>
+      <dt><kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd></dt><dd>Соседняя вкладка</dd>
+      <dt><kbd>Alt</kbd> + <kbd>1</kbd>…<kbd>9</kbd></dt><dd>Вкладка по номеру</dd>
+      <dt><kbd>/</kbd></dt><dd>Строка быстрой записи внизу; <kbd>+</kbd> <kbd>-</kbd> <kbd>?</kbd> <kbd>!</kbd> <kbd>*</kbd> и пробел в начале — раздел, <kbd>#тег</kbd> — тег</dd>
+      <dt><kbd>Enter</kbd></dt><dd>Новая запись ниже</dd>
+      <dt><kbd>Shift</kbd> + <kbd>Enter</kbd></dt><dd>Перенос внутри записи</dd>
+      <dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Строка выше / ниже</dd>
+      <dt><kbd>Alt</kbd> + <kbd>T</kbd></dt><dd>Теги записи, в списке <kbd>1</kbd>…<kbd>9</kbd> — поставить или снять</dd>
+      <dt><kbd>Ctrl</kbd> + <kbd>B</kbd></dt><dd>Жирный</dd>
+      <dt><kbd>Ctrl</kbd> + <kbd>I</kbd></dt><dd>Курсив</dd>
+      <dt><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd></dt><dd>Зачёркнутый</dd>
+      <dt><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd></dt><dd>Скопировать в Mattermost</dd>
+      <dt><kbd>Ctrl</kbd> + <kbd>Z</kbd></dt><dd>Вернуть удалённую запись (вне поля ввода)</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Закрыть окно или список</dd>
+    </dl>
+    <div class="ask__btns"><button class="btn" value="close">Понятно</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 const TONES = ["green","red","amber","violet","blue","slate"];
@@ -413,70 +638,123 @@ const GLYPHS = {
   "small":"🟩","medium":"🟨","large":"🟧","x-large":"🟥","ux":"🪄","bug":"🐞",
   "moneybag":"💰","brain":"🧠"
 };
+const TYPE_NAMES = {list:"список", quote:"цитата", raw:"Markdown"};
 const uid = () => Math.random().toString(36).slice(2,9);
+const newItem = (text) => ({id:uid(), text:text || "", tags:[]});
 
-const TAGS_REV = 2;
+const KEY = "retro-v2";
+const TPL_REV = 3;
+function isTitled(b, title){ return (b.title || "").trim().toLowerCase() === title; }
+const OLD_KEY = "protokol-iteracii-v1";
+
 function defaultTags(){
   return [
-    {id:"s",     label:"S",     code:"small",      tone:"green"},
-    {id:"m",     label:"M",     code:"medium",     tone:"amber"},
-    {id:"l",     label:"L",     code:"large",      tone:"red"},
-    {id:"ux",    label:"UX",    code:"ux",         tone:"violet"},
-    {id:"zp",    label:"ЗП",    code:"moneybag",   tone:"blue"},
-    {id:"shturm",label:"ШТУРМ", code:"brain",      tone:"slate"}
+    {id:"s",      label:"S",     tone:"green"},
+    {id:"m",      label:"M",     tone:"amber"},
+    {id:"l",      label:"L",     tone:"red"},
+    {id:"ux",     label:"UX",    tone:"violet"},
+    {id:"zp",     label:"ЗП",    tone:"blue"},
+    {id:"shturm", label:"ШТУРМ", tone:"slate"}
   ];
 }
 
-function sample(){
-  const L = (type,sticker,title,tone,lines,after) => ({
-    id:uid(), type, sticker, title, after:after||"", tone,
-    items:(lines||[]).map(l => Array.isArray(l)
-      ? {id:uid(), text:l[0], tags:l[1]}
-      : {id:uid(), text:l, tags:[]}),
-    text:""
-  });
-  return {
-    tagsRev: TAGS_REV,
-    tags: defaultTags(),
-    blocks:[
-      L("list","super-admin-green-dot","ПЛЮСЫ","green",[]),
-      L("list","super-admin-red-dot","МИНУСЫ","red",[]),
-      L("list","question","Вопросы","amber",[]),
-      L("list","exclamation","Идеи","violet",[]),
-      L("list","briefcase","ПЛАНЫ","blue",[]),
-      L("list","performing_arts","ПРЕЗА","slate",[]),
-      L("quote","yandexdisk","ЗАПИСЬ","slate",[
-        "Открывается только с корпоративной почты  (БУДЕТ ПОЗЖЕ)",
-        "Ссылка на видео:  ",
-        "Ссылка на аудио:  "
-      ]),
-      {id:uid(),type:"raw",sticker:"",title:"Подвал",after:"",tone:"slate",items:[],
-       text:""}
-    ]
-  };
+function defaultBlocks(){
+  const B = (type, sticker, title, tone, prefix, preset) =>
+    ({id:uid(), type, sticker, title, after:"", tone, prefix, preset});
+  return [
+    B("list","super-admin-green-dot","ПЛЮСЫ","green","+"),
+    B("list","super-admin-red-dot","МИНУСЫ","red","-"),
+    B("list","question","Вопросы","amber","?"),
+    B("list","exclamation","Идеи","violet","!"),
+    B("list","briefcase","ПЛАНЫ","blue","*"),
+    B("list","performing_arts","ПРЕЗА","slate","")
+  ];
 }
 
-const KEY = "protokol-iteracii-v1";
-let state = load() || sample();
-state.ui = state.ui || {md:false, tags:false};
-if((state.tagsRev || 1) < TAGS_REV){
-  defaultTags().forEach(t => { if(!state.tags.some(x => x.id === t.id)) state.tags.push(t); });
-  state.tagsRev = TAGS_REV;
+function startRetro(st){
+  st.notes = {};
+  st.raw = {};
+  st.blocks.forEach(b => {
+    if(b.type === "quote") st.notes[b.id] = (b.preset || []).map(newItem);
+    if(b.type === "raw") st.raw[b.id] = b.preset || "";
+  });
+  return st;
+}
+
+function fresh(){
+  return startRetro({v:2, tplRev:TPL_REV, tags:defaultTags(), blocks:defaultBlocks(), ui:{}});
+}
+
+const PREFIX_BY_TITLE = {"плюсы":"+","минусы":"-","вопросы":"?","идеи":"!","планы":"*"};
+
+function migrate(old){
+  const tags = old.tags || defaultTags();
+  if((old.tagsRev || 1) < 2){
+    defaultTags().forEach(t => { if(!tags.some(x => x.id === t.id)) tags.push(t); });
+  }
+  const st = {v:2, tags, blocks:[], notes:{}, raw:{}, ui:{}};
+  (old.blocks || []).forEach(b => {
+    const cfg = {
+      id:b.id, type:b.type, sticker:b.sticker || "", title:b.title || "", after:b.after || "",
+      tone:b.tone || "slate", prefix:PREFIX_BY_TITLE[(b.title || "").trim().toLowerCase()] || ""
+    };
+    if(b.type === "quote") cfg.preset = (b.items || []).map(i => i.text.replace(/https?:\/\/\S+/g, ""));
+    if(b.type === "raw") cfg.preset = b.text || "";
+    st.blocks.push(cfg);
+    if(b.type === "raw") st.raw[b.id] = b.text || "";
+    else st.notes[b.id] = b.items || [];
+  });
+  return st;
 }
 
 function load(){
-  try{ const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; }
-  catch(e){ return null; }
-}
-function save(){
-  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+    const old = localStorage.getItem(OLD_KEY);
+    if(old) return migrate(JSON.parse(old));
+  }catch(e){}
+  return null;
 }
 
-/* ---------------- markdown ---------------- */
+let state = load() || fresh();
+state.ui = state.ui || {};
+state.notes = state.notes || {};
+state.raw = state.raw || {};
+state.tags.forEach(t => { delete t.code; });
+if((state.tplRev || 0) < TPL_REV){
+  const dropped = b => (b.type === "quote" && isTitled(b, "запись")) || (b.type === "raw" && isTitled(b, "подвал"));
+  state.blocks.filter(dropped).forEach(b => { delete state.notes[b.id]; delete state.raw[b.id]; });
+  state.blocks = state.blocks.filter(b => !dropped(b));
+  state.tplRev = TPL_REV;
+}
+
+const $saved = document.getElementById("saved");
+let savedTimer;
+let syncing = false;
+function save(quiet){
+  if(syncing) return;
+  try{
+    localStorage.setItem(KEY, JSON.stringify(state));
+    if(quiet) return;
+    $saved.textContent = navigator.onLine === false ? "✓ сохранено · без сети" : "✓ сохранено";
+    $saved.classList.remove("bad");
+    $saved.classList.add("flash");
+    clearTimeout(savedTimer);
+    savedTimer = setTimeout(() => $saved.classList.remove("flash"), 700);
+  }catch(e){
+    $saved.textContent = "не сохраняется в этом браузере";
+    $saved.classList.add("bad");
+  }
+}
+
+const notesOf = b => state.notes[b.id] || (state.notes[b.id] = []);
+const tagLabel = t => (t.label || "").trim().toUpperCase();
+const tagsOf = it => (it.tags || []).map(id => state.tags.find(t => t.id === id)).filter(t => t && tagLabel(t));
+
 const esc = s => String(s).replace(/_/g,"\\_");
 const code = c => c ? ":" + esc(c.replace(/^:|:$/g,"")) + ":" : "";
 
-/* whole-line emphasis: keeps leading/trailing spaces outside the markers */
 function emphasize(it){
   const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(it.text);
   const lead = m[1], core = m[2], tail = m[3];
@@ -489,21 +767,18 @@ function emphasize(it){
 }
 
 function markdown(){
-  const tagById = {};
-  state.tags.forEach(t => tagById[t.id] = t);
   const out = [];
   state.blocks.forEach(b => {
     if(b.type === "raw"){
-      if(b.text.trim()) out.push(b.text.trim());
+      const text = (state.raw[b.id] || "").trim();
+      if(text) out.push(text);
       return;
     }
-    const head = ["###", code(b.sticker), "\\[ " + b.title.trim() + " \\]", b.after.trim()]
+    const head = ["###", code(b.sticker), "\\[ " + b.title.trim() + " \\]", (b.after || "").trim()]
       .filter(Boolean).join(" ");
-    const lines = b.items.map(it => {
-      const stickers = (it.tags||[])
-        .map(id => tagById[id] && code(tagById[id].code))
-        .filter(Boolean).join(" ");
-      const body = (stickers ? stickers + " " : "") + emphasize(it);
+    const lines = notesOf(b).map(it => {
+      const labels = tagsOf(it).map(tagLabel);
+      const body = (labels.length ? "\\[ " + labels.join(" | ") + " \\] " : "") + emphasize(it);
       return b.type === "quote" ? "> " + body : "*   " + body;
     });
     out.push(lines.length ? head + "\n\n" + lines.join("\n") : head);
@@ -511,31 +786,47 @@ function markdown(){
   return out.join("\n\n") + "\n";
 }
 
-function highlight(md){
-  return md.split("\n").map(l => {
-    const e = l.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-    if(/^###/.test(l)) return '<span class="h">' + e + "</span>";
-    if(/^&?gt;|^>/.test(l)) return '<span class="b">' + e + "</span>";
-    return e.replace(/^(\*\s{3})/, '<span class="b">$1</span>')
-            .replace(/(\\\[|\\\])/g,'<span class="b">$1</span>')
-            .replace(/(:[a-z0-9\\_-]+:)/gi, '<span class="s">$1</span>')
-            .replace(/(\*\*[^*]+\*\*)/g, '<span class="st">$1</span>');
-  }).join("\n");
+const $tabs = document.getElementById("tabs");
+const $section = document.getElementById("section");
+const $tags = document.getElementById("tags");
+const $tplBlocks = document.getElementById("tpl-blocks");
+
+const glyphOf = b => GLYPHS[(b.sticker || "").replace(/^:|:$/g,"")] || (b.type === "raw" ? "¶" : "");
+function hasContent(b){
+  return b.type === "raw" ? !!(state.raw[b.id] || "").trim() : notesOf(b).some(i => i.text.trim());
+}
+const isBlank = it => !!it && !it.text.trim() && !(it.tags || []).length;
+const filled = b => b.type === "raw" ? 0 : notesOf(b).filter(i => i.text.trim()).length;
+function plural(n, one, few, many){
+  const m10 = n % 10, m100 = n % 100;
+  if(m10 === 1 && m100 !== 11) return one;
+  if(m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
 }
 
-/* ---------------- render ---------------- */
-const $blocks = document.getElementById("blocks");
-const $out = document.getElementById("out");
-const $tags = document.getElementById("tags");
-const $stat = document.getElementById("stat");
+function current(){
+  let b = state.blocks.find(x => x.id === state.ui.tab);
+  if(!b){ b = state.blocks[0]; if(b) state.ui.tab = b.id; }
+  return b;
+}
 
-function renderOut(){
-  const md = markdown();
-  $out.innerHTML = highlight(md);
-  const items = state.blocks.reduce((n,b) => n + b.items.length, 0);
-  $stat.textContent = state.blocks.length + " блоков · " + items + " записей · " + md.length + " симв.";
-  const st2 = document.getElementById("stat2");
-  if(st2) st2.textContent = md.split("\n").length + " строк";
+function refresh(){
+  document.querySelectorAll("[data-n]").forEach(n => {
+    const b = state.blocks.find(x => x.id === n.dataset.n);
+    const c = b ? filled(b) : 0;
+    n.textContent = c || "";
+  });
+  const b = current();
+  const cnt = document.getElementById("count");
+  if(b && cnt){
+    const n = filled(b);
+    cnt.textContent = b.type === "list" ? (n ? n + " " + plural(n, "запись", "записи", "записей") : "пока пусто") : "";
+  }
+  const add = $section.querySelector(".add-item");
+  if(b && add){
+    const items = notesOf(b);
+    add.hidden = isBlank(items[items.length - 1]);
+  }
   save();
 }
 
@@ -549,133 +840,112 @@ function textHeight(ta, text){
   return height;
 }
 
-function tagOf(id){ return state.tags.find(t => t.id === id); }
-
-function renderTags(){
-  $tags.innerHTML = "";
-  const note = document.getElementById("tagnote");
-  if(note) note.textContent = state.tags.map(t => t.label).join(" · ");
-  state.tags.forEach(t => {
-    const row = document.createElement("div");
-    row.className = "tagrow";
-    row.innerHTML =
-      '<input class="t-label" value="" aria-label="Подпись стикера">' +
-      '<input class="t-code" value="" aria-label="Код стикера" placeholder="small">' +
-      '<button class="swatch" title="Сменить цвет" aria-label="Сменить цвет стикера"></button>' +
-      '<button class="icobtn icobtn--danger" title="Удалить стикер" aria-label="Удалить стикер">✕</button>';
-    const [lab, cod] = row.querySelectorAll("input");
-    const [sw, del] = row.querySelectorAll("button");
-    lab.value = t.label; cod.value = t.code;
-    row.style.setProperty("--chip", "var(--t-" + t.tone + ")");
-    lab.oninput = () => { t.label = lab.value; renderBlocks(); };
-    cod.oninput = () => { t.code = cod.value; renderOut(); };
-    sw.onclick = () => {
-      t.tone = TONES[(TONES.indexOf(t.tone) + 1) % TONES.length];
-      renderTags(); renderBlocks();
-    };
-    del.onclick = () => {
-      state.tags = state.tags.filter(x => x.id !== t.id);
-      state.blocks.forEach(b => b.items.forEach(i => i.tags = (i.tags||[]).filter(x => x !== t.id)));
-      renderTags(); renderBlocks();
-    };
-    $tags.appendChild(row);
+function renderTabs(){
+  $tabs.innerHTML = "";
+  const cur = current();
+  state.blocks.forEach((b, bi) => {
+    const tab = document.createElement("button");
+    tab.className = "tab";
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-selected", cur && cur.id === b.id ? "true" : "false");
+    tab.style.setProperty("--tone", "var(--t-" + b.tone + ")");
+    if(bi < 9) tab.title = "Alt+" + (bi + 1);
+    tab.innerHTML = '<span class="tab__dot"></span><span></span><span class="tab__n"></span>';
+    tab.children[1].textContent = b.title || "Без названия";
+    tab.children[2].dataset.n = b.id;
+    tab.onclick = () => openTab(b.id);
+    $tabs.appendChild(tab);
   });
+}
+
+function openTab(id, focusFirst){
+  closePop();
+  state.ui.tab = id;
+  render();
+  const sel = $tabs.querySelector('[aria-selected="true"]');
+  if(sel) sel.scrollIntoView({block:"nearest", inline:"nearest"});
+  if(focusFirst){
+    const tas = $section.querySelectorAll(".ta, .raw-ta");
+    if(tas.length) focusAt(tas[tas.length - 1], true);
+  }
 }
 
 let drag = null;
 
-function renderBlocks(){
-  $blocks.innerHTML = "";
-  const frag = document.createDocumentFragment();
+function render(){
+  renderTabs();
+  $section.innerHTML = "";
+  const b = current();
+  if(!b){ refresh(); return; }
+  $section.style.setProperty("--tone", "var(--t-" + b.tone + ")");
 
-  state.blocks.forEach((b, bi) => {
-    const card = document.createElement("section");
-    card.className = "block";
-    card.style.setProperty("--tone", "var(--t-" + b.tone + ")");
+  const head = document.createElement("div");
+  head.className = "section__head";
+  const g = glyphOf(b);
+  if(g){
+    const glyph = document.createElement("span");
+    glyph.className = "section__glyph";
+    glyph.textContent = g;
+    head.appendChild(glyph);
+  }
+  const title = document.createElement("h2");
+  title.className = "section__title";
+  title.textContent = b.title;
+  head.appendChild(title);
+  if((b.after || "").trim()){
+    const after = document.createElement("span");
+    after.className = "section__after";
+    after.textContent = b.after;
+    head.appendChild(after);
+  }
+  const count = document.createElement("span");
+  count.className = "section__count";
+  count.id = "count";
+  head.appendChild(count);
+  $section.appendChild(head);
 
-    /* head */
-    const head = document.createElement("div");
-    head.className = "block__head";
-    head.innerHTML =
-      '<span class="glyph"></span>' +
-      '<input class="i-code" placeholder=":sticker:" aria-label="Код стикера блока">' +
-      '<input class="i-title" aria-label="Заголовок блока">' +
-      '<input class="i-after" placeholder="@кто-то" aria-label="Приписка после заголовка">' +
-      '<div class="head-tools">' +
-        '<button class="icobtn" data-a="tone" title="Цвет блока" aria-label="Цвет блока"><span class="tone-dot"></span></button>' +
-        '<button class="icobtn" data-a="up" title="Блок выше" aria-label="Переместить блок выше">↑</button>' +
-        '<button class="icobtn" data-a="down" title="Блок ниже" aria-label="Переместить блок ниже">↓</button>' +
-        '<button class="icobtn icobtn--danger" data-a="del" title="Удалить блок" aria-label="Удалить блок">✕</button>' +
-      '</div>';
-    const glyph = head.querySelector(".glyph");
-    const iCode = head.querySelector(".i-code");
-    const iTitle = head.querySelector(".i-title");
-    const iAfter = head.querySelector(".i-after");
-    const setGlyph = () => {
-      const k = (b.sticker || "").replace(/^:|:$/g,"");
-      glyph.textContent = GLYPHS[k] || (b.type === "raw" ? "¶" : "•");
+  if(b.type === "raw"){
+    const ta = document.createElement("textarea");
+    ta.className = "raw-ta";
+    ta.value = state.raw[b.id] || "";
+    ta.setAttribute("aria-label", b.title || "Свободный Markdown");
+    ta.oninput = () => { state.raw[b.id] = ta.value; refresh(); };
+    $section.appendChild(ta);
+  } else {
+    const items = notesOf(b);
+    const list = document.createElement("div");
+    list.className = "items";
+    items.forEach((it, ii) => list.appendChild(itemRow(b, items, it, ii)));
+    $section.appendChild(list);
+
+    const add = document.createElement("button");
+    add.className = "add-item";
+    add.innerHTML = '<span>+</span><span></span><kbd>Enter в строке</kbd>';
+    add.children[1].textContent = b.type === "quote" ? "Новая строка" : "Новая запись";
+    add.onclick = () => {
+      if(!isBlank(items[items.length - 1])){
+        items.push(newItem());
+        render();
+      }
+      focusItem(items.length - 1);
     };
-    iCode.value = b.sticker; iTitle.value = b.title; iAfter.value = b.after;
-    if(b.type === "raw"){ iCode.style.display = "none"; iAfter.style.display = "none"; }
-    setGlyph();
-    iCode.oninput = () => { b.sticker = iCode.value; setGlyph(); renderOut(); };
-    iTitle.oninput = () => { b.title = iTitle.value; renderOut(); };
-    iAfter.oninput = () => { b.after = iAfter.value; renderOut(); };
-    head.querySelector('[data-a="tone"]').onclick = () => {
-      b.tone = TONES[(TONES.indexOf(b.tone) + 1) % TONES.length];
-      renderBlocks();
-    };
-    head.querySelector('[data-a="up"]').onclick = () => moveBlock(bi, bi - 1);
-    head.querySelector('[data-a="down"]').onclick = () => moveBlock(bi, bi + 1);
-    head.querySelector('[data-a="del"]').onclick = () => {
-      state.blocks.splice(bi, 1); renderBlocks();
-    };
-    card.appendChild(head);
+    $section.appendChild(add);
+  }
 
-    /* body */
-    if(b.type === "raw"){
-      const ta = document.createElement("textarea");
-      ta.className = "raw-ta";
-      ta.value = b.text;
-      ta.setAttribute("aria-label", "Свободный Markdown");
-      ta.oninput = () => { b.text = ta.value; renderOut(); };
-      card.appendChild(ta);
-    } else {
-      const list = document.createElement("div");
-      list.className = "items";
-      b.items.forEach((it, ii) => list.appendChild(itemRow(b, it, ii)));
-      card.appendChild(list);
-
-      const foot = document.createElement("div");
-      foot.className = "block__foot";
-      const add = document.createElement("button");
-      add.className = "btn btn--sm";
-      add.textContent = b.type === "quote" ? "+ Строка" : "+ Запись";
-      add.onclick = () => {
-        b.items.push({id:uid(), text:"", tags:[]});
-        renderBlocks();
-        const tas = card.querySelectorAll(".ta");
-        if(tas.length) tas[tas.length - 1].focus();
-      };
-      foot.appendChild(add);
-      card.appendChild(foot);
-    }
-
-    frag.appendChild(card);
-  });
-
-  $blocks.appendChild(frag);
-  $blocks.style.display = "flex";
-  $blocks.style.flexDirection = "column";
-  $blocks.style.gap = "14px";
-  $blocks.querySelectorAll(".ta").forEach(grow);
-  renderOut();
+  $section.querySelectorAll(".ta").forEach(grow);
+  if(state.timer && !findItem(state.timer.itemId)){ state.timer = null; closeTimer(); }
+  if(tpopFor && !$section.querySelector('[data-id="' + tpopFor + '"]')) closeTimer();
+  tick();
+  placeTimer();
+  syncQuick();
+  refresh();
 }
 
-function itemRow(b, it, ii){
+function itemRow(b, items, it, ii){
   const row = document.createElement("div");
   row.className = "item";
   row.dataset.i = ii;
+  row.dataset.id = it.id;
 
   const handle = document.createElement("button");
   handle.className = "handle";
@@ -717,6 +987,31 @@ function itemRow(b, it, ii){
     moveItem(b, drag.from, to);
   });
 
+  const line = document.createElement("div");
+  line.className = "line";
+
+  const tagbtn = document.createElement("button");
+  const on = tagsOf(it);
+  tagbtn.className = "tagbtn" + (on.length ? "" : " tagbtn--empty");
+  tagbtn.setAttribute("aria-haspopup", "true");
+  tagbtn.setAttribute("aria-expanded", "false");
+  if(on.length){
+    tagbtn.title = "Изменить теги (Alt+T)";
+    tagbtn.setAttribute("aria-label", "Теги: " + on.map(tagLabel).join(", ") + ". Изменить");
+    on.forEach(t => {
+      const s = document.createElement("span");
+      s.className = "tag";
+      s.style.setProperty("--tag", "var(--t-" + t.tone + ")");
+      s.textContent = tagLabel(t);
+      tagbtn.appendChild(s);
+    });
+  } else {
+    tagbtn.textContent = "+";
+    tagbtn.title = "Добавить тег (Alt+T)";
+    tagbtn.setAttribute("aria-label", "Добавить тег");
+  }
+  tagbtn.onclick = e => { e.stopPropagation(); openPop(tagbtn, b, it, ii); };
+
   const ta = document.createElement("textarea");
   ta.className = "ta";
   const syncStyle = () => {
@@ -727,14 +1022,30 @@ function itemRow(b, it, ii){
   syncStyle();
   ta.rows = 1;
   ta.value = it.text;
+  ta.placeholder = b.type === "quote" ? "Строка" : "Запись";
   ta.setAttribute("aria-label", "Текст записи");
-  ta.oninput = () => { it.text = ta.value; grow(ta); renderOut(); };
+  ta.oninput = () => { it.text = ta.value; grow(ta); refresh(); };
+  const remember = () => {
+    const c = state.ui.caret;
+    if(c && c.id === it.id && c.pos === ta.selectionStart) return;
+    state.ui.caret = {id:it.id, pos:ta.selectionStart};
+    save(true);
+  };
+  ta.addEventListener("focus", () => setTimeout(remember));
+  ta.addEventListener("keyup", remember);
+  ta.addEventListener("mouseup", remember);
   ta.addEventListener("keydown", e => {
     if(e.key === "Enter" && !e.shiftKey){
       e.preventDefault();
-      b.items.splice(ii + 1, 0, {id:uid(), text:"", tags:[]});
-      renderBlocks();
-      focusItem(b.id, ii + 1);
+      if(isBlank(it)) return;
+      if(isBlank(items[ii + 1])){ focusItem(ii + 1); return; }
+      items.splice(ii + 1, 0, newItem());
+      render();
+      focusItem(ii + 1);
+    }
+    if(e.altKey && !e.ctrlKey && (e.key === "t" || e.key === "T" || e.key === "е" || e.key === "Е")){
+      e.preventDefault();
+      openPop(tagbtn, b, it, ii);
     }
     if((e.key === "ArrowUp" || e.key === "ArrowDown") &&
        !e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey &&
@@ -743,22 +1054,22 @@ function itemRow(b, it, ii){
       const before = textHeight(ta, ta.value.slice(0, ta.selectionStart));
       const edge = up ? before === textHeight(ta, "") : before === textHeight(ta, ta.value);
       if(!edge) return;
-      const all = [...$blocks.querySelectorAll(".ta")];
+      const all = [...$section.querySelectorAll(".ta")];
       const next = all[all.indexOf(ta) + (up ? -1 : 1)];
       if(!next) return;
       e.preventDefault();
-      next.focus();
-      const pos = up ? next.value.length : 0;
-      next.setSelectionRange(pos, pos);
+      focusAt(next, up);
     }
   });
 
-  const right = document.createElement("div");
-  right.className = "item__right";
+  line.append(tagbtn, ta);
+
+  const tools = document.createElement("div");
+  tools.className = "tools";
 
   const fmtBtn = (kind, label, title) => {
     const btn = document.createElement("button");
-    btn.className = "fmt fmt--" + {bold:"b", italic:"i", strike:"s"}[kind];
+    btn.className = "tool tool--" + {bold:"b", italic:"i", strike:"s"}[kind];
     btn.textContent = label;
     btn.title = title;
     btn.setAttribute("aria-label", title);
@@ -767,131 +1078,736 @@ function itemRow(b, it, ii){
       it[kind] = !it[kind];
       btn.setAttribute("aria-pressed", it[kind] ? "true" : "false");
       syncStyle();
-      renderOut();
+      refresh();
     };
     return btn;
   };
   const bBtn = fmtBtn("bold", "Ж", "Жирная строка (Ctrl+B)");
   const iBtn = fmtBtn("italic", "К", "Курсивная строка (Ctrl+I)");
   const sBtn = fmtBtn("strike", "З", "Зачёркнутая строка (Ctrl+Shift+X)");
-  right.append(bBtn, iBtn, sBtn);
-  const sep = document.createElement("span");
-  sep.className = "sep";
-  right.appendChild(sep);
+  const timerBtn = document.createElement("button");
+  timerBtn.className = "tool tool--timer";
+  timerBtn.innerHTML = CLOCK_ICON;
+  timerBtn.title = "Таймер обсуждения";
+  timerBtn.setAttribute("aria-label", "Таймер обсуждения");
+  timerBtn.onclick = e => { e.stopPropagation(); openTimer(it.id); };
+  tools.append(bBtn, iBtn, sBtn, timerBtn);
 
   ta.addEventListener("keydown", e => {
     if(!(e.ctrlKey || e.metaKey)) return;
     const k = e.key.toLowerCase();
-    if(k === "b"){ e.preventDefault(); bBtn.click(); }
-    if(k === "i"){ e.preventDefault(); iBtn.click(); }
-    if(k === "x" && e.shiftKey){ e.preventDefault(); sBtn.click(); }
+    if(k === "b" || k === "и"){ e.preventDefault(); bBtn.click(); }
+    if(k === "i" || k === "ш"){ e.preventDefault(); iBtn.click(); }
+    if((k === "x" || k === "ч") && e.shiftKey){ e.preventDefault(); sBtn.click(); }
   });
-
-  state.tags.forEach(t => {
-    const on = (it.tags || []).includes(t.id);
-    const chip = document.createElement("button");
-    chip.className = "chip";
-    chip.textContent = t.label || t.code;
-    chip.style.setProperty("--chip", "var(--t-" + t.tone + ")");
-    chip.setAttribute("aria-pressed", on ? "true" : "false");
-    chip.title = ":" + t.code + ":";
-    chip.onclick = () => {
-      it.tags = it.tags || [];
-      const nowOn = !it.tags.includes(t.id);
-      it.tags = nowOn ? [...it.tags, t.id] : it.tags.filter(x => x !== t.id);
-      chip.setAttribute("aria-pressed", nowOn ? "true" : "false");
-      row.classList.remove("open");
-      renderOut();
-    };
-    right.appendChild(chip);
-  });
-  const plus = document.createElement("button");
-  plus.className = "plus";
-  plus.innerHTML = '<svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">' +
-    '<path d="M5 0.6 V9.4 M0.6 5 H9.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>';
-  plus.title = "Показать все стикеры";
-  plus.setAttribute("aria-label", "Показать все стикеры");
-  plus.onclick = () => row.classList.toggle("open");
-  right.appendChild(plus);
 
   const plans = isTitled(b, "идеи") && state.blocks.find(x => x.type === "list" && isTitled(x, "планы"));
   if(plans){
-    const planned = !!(it.planId && plans.items.some(x => x.id === it.planId));
+    const planItems = notesOf(plans);
+    const planned = !!(it.planId && planItems.some(x => x.id === it.planId));
+    const sep = document.createElement("span");
+    sep.className = "sep";
     const move = document.createElement("button");
-    move.className = "fmt fmt--move";
+    move.className = "tool tool--move";
     move.textContent = "→";
-    move.title = planned ? "Уже в планах" : "Перенести в планы";
+    move.title = planned ? "Уже в планах" : "Перенести в «" + plans.title + "»";
     move.setAttribute("aria-label", move.title);
     move.disabled = planned;
     move.onclick = () => {
       const copy = {id:uid(), text:it.text, tags:[...(it.tags||[])], bold:!!it.bold, italic:!!it.italic};
-      const last = plans.items[plans.items.length - 1];
-      if(last && !last.text.trim() && !(last.tags||[]).length) plans.items[plans.items.length - 1] = copy;
-      else plans.items.push(copy);
+      const last = planItems[planItems.length - 1];
+      if(last && !last.text.trim() && !(last.tags||[]).length) planItems[planItems.length - 1] = copy;
+      else planItems.push(copy);
       it.planId = copy.id;
       it.strike = true;
-      renderBlocks();
-      toast("Перенесено в планы");
+      render();
+      toast("Перенесено в «" + plans.title + "»");
     };
-    right.appendChild(move);
+    tools.append(sep, move);
   }
 
   const del = document.createElement("button");
-  del.className = "icobtn icobtn--danger";
+  del.className = "tool tool--del";
   del.textContent = "✕";
   del.title = "Удалить запись";
   del.setAttribute("aria-label", "Удалить запись");
-  del.onclick = () => { b.items.splice(ii, 1); renderBlocks(); };
-  right.appendChild(del);
+  del.onclick = () => removeItem(b, ii);
+  tools.appendChild(del);
 
-  row.append(handle, ta, right);
+  const slot = document.createElement("div");
+  if(state.timer && state.timer.itemId === it.id){
+    const badge = document.createElement("button");
+    badge.className = "tbadge";
+    badge.dataset.tbadge = "";
+    badge.title = "Открыть таймер";
+    badge.innerHTML = ringSvg(16, 2.5) + '<span data-tl></span>';
+    badge.onclick = e => { e.stopPropagation(); openTimer(it.id); };
+    slot.appendChild(badge);
+  }
+
+  row.append(handle, line, tools, slot);
   return row;
 }
 
-function isTitled(b, title){ return (b.title || "").trim().toLowerCase() === title; }
+function focusAt(ta, toEnd){
+  ta.focus();
+  const pos = toEnd ? ta.value.length : 0;
+  ta.setSelectionRange(pos, pos);
+}
 
-function focusItem(blockId, index){
-  const bi = state.blocks.findIndex(x => x.id === blockId);
-  if(bi < 0) return;
-  const card = $blocks.children[bi];
-  if(!card) return;
-  const tas = card.querySelectorAll(".ta");
-  if(tas[index]){ tas[index].focus(); tas[index].setSelectionRange(tas[index].value.length, tas[index].value.length); }
+function focusItem(index){
+  const tas = $section.querySelectorAll(".ta");
+  if(tas[index]) focusAt(tas[index], true);
 }
 
 function moveItem(b, from, to, keepFocus){
-  if(to < 0 || to >= b.items.length || from === to) return;
-  const [moved] = b.items.splice(from, 1);
-  b.items.splice(to, 0, moved);
-  renderBlocks();
+  const items = notesOf(b);
+  if(to < 0 || to >= items.length || from === to) return;
+  const [moved] = items.splice(from, 1);
+  items.splice(to, 0, moved);
+  render();
   if(keepFocus){
-    const bi = state.blocks.findIndex(x => x.id === b.id);
-    const card = $blocks.children[bi];
-    const handles = card && card.querySelectorAll(".handle");
-    if(handles && handles[to]) handles[to].focus();
+    const handles = $section.querySelectorAll(".handle");
+    if(handles[to]) handles[to].focus();
   }
+}
+
+const $pop = document.getElementById("pop");
+let popFor = null;
+
+function openPop(anchor, b, it, ii){
+  if(popFor && popFor.it === it){ closePop(); return; }
+  closePop();
+  closeTimer();
+  popFor = {anchor, it, ii};
+  anchor.setAttribute("aria-expanded", "true");
+  $pop.innerHTML = "";
+  state.tags.forEach((t, ti) => {
+    if(!tagLabel(t)) return;
+    const opt = document.createElement("button");
+    opt.className = "pop__opt";
+    opt.setAttribute("role", "menuitemcheckbox");
+    opt.setAttribute("aria-checked", (it.tags || []).includes(t.id) ? "true" : "false");
+    opt.style.setProperty("--tag", "var(--t-" + t.tone + ")");
+    opt.innerHTML = '<span class="pop__box">✓</span><span class="tag"></span><span class="pop__key"></span>';
+    opt.querySelector(".tag").textContent = tagLabel(t);
+    opt.querySelector(".tag").style.setProperty("--tag", "var(--t-" + t.tone + ")");
+    if(ti < 9) opt.querySelector(".pop__key").textContent = ti + 1;
+    opt.onclick = () => toggleTag(it, t.id, ii);
+    $pop.appendChild(opt);
+  });
+  const hr = document.createElement("hr");
+  const more = document.createElement("button");
+  more.className = "pop__more";
+  more.textContent = "Настроить теги…";
+  more.onclick = () => { closePop(); setDrawer(true, "tags"); };
+  $pop.append(hr, more);
+
+  $pop.hidden = false;
+  placePop();
+  const first = $pop.querySelector(".pop__opt");
+  if(first) first.focus({preventScroll:true});
+}
+
+function closePop(){
+  if(!popFor) return;
+  if(popFor.anchor) popFor.anchor.setAttribute("aria-expanded", "false");
+  popFor = null;
+  $pop.hidden = true;
+}
+
+function toggleTag(it, tagId, ii){
+  it.tags = it.tags || [];
+  it.tags = it.tags.includes(tagId) ? it.tags.filter(x => x !== tagId) : [...it.tags, tagId];
+  const opts = [...$pop.querySelectorAll(".pop__opt")];
+  const focused = opts.indexOf(document.activeElement);
+  render();
+  const row = $section.querySelectorAll(".item")[ii];
+  if(!row || !popFor){ closePop(); return; }
+  popFor.anchor = row.querySelector(".tagbtn");
+  popFor.anchor.setAttribute("aria-expanded", "true");
+  state.tags.filter(tagLabel).forEach((t, i) => {
+    if(opts[i]) opts[i].setAttribute("aria-checked", it.tags.includes(t.id) ? "true" : "false");
+  });
+  placePop();
+  if(opts[focused]) opts[focused].focus({preventScroll:true});
+}
+
+function placePop(){
+  if(!popFor) return;
+  const r = popFor.anchor.getBoundingClientRect();
+  const w = $pop.offsetWidth, h = $pop.offsetHeight;
+  let top = r.bottom + 6;
+  if(top + h > innerHeight - 12) top = Math.max(12, r.top - h - 6);
+  $pop.style.left = Math.max(12, Math.min(r.left, innerWidth - w - 12)) + "px";
+  $pop.style.top = top + "px";
+}
+
+$pop.addEventListener("keydown", e => {
+  const opts = [...$pop.querySelectorAll("button")];
+  const i = opts.indexOf(document.activeElement);
+  if(e.key === "ArrowDown"){ e.preventDefault(); opts[(i + 1) % opts.length].focus(); }
+  if(e.key === "ArrowUp"){ e.preventDefault(); opts[(i - 1 + opts.length) % opts.length].focus(); }
+  if(/^[1-9]$/.test(e.key) && popFor){
+    const t = state.tags[+e.key - 1];
+    if(t && tagLabel(t)){ e.preventDefault(); toggleTag(popFor.it, t.id, popFor.ii); }
+  }
+  if(e.key === "Escape" || e.key === "Tab"){
+    e.preventDefault();
+    const ii = popFor && popFor.ii;
+    closePop();
+    if(ii != null) focusItem(ii);
+  }
+});
+document.addEventListener("click", e => { if(popFor && !$pop.contains(e.target)) closePop(); });
+window.addEventListener("resize", placePop);
+window.addEventListener("scroll", placePop, true);
+
+const CLOCK_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">' +
+  '<circle cx="8" cy="9" r="5.5"/><path d="M8 6.2V9l1.8 1.3M6.5 1.8h3"/></svg>';
+const PRESETS = [1, 2, 3, 5, 10];
+
+function ringSvg(size, width){
+  const r = (size - width) / 2, c = 2 * Math.PI * r;
+  return '<svg class="ring" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" aria-hidden="true">' +
+    '<circle class="ring__bg" cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" stroke-width="' + width + '"/>' +
+    '<circle class="ring__fg" data-ring cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" stroke-width="' + width + '"' +
+    ' stroke-dasharray="' + c + '" stroke-dashoffset="0"/></svg>';
+}
+
+function findItem(id){
+  for(const b of state.blocks){
+    const it = (state.notes[b.id] || []).find(x => x.id === id);
+    if(it) return {b, it};
+  }
+  return null;
+}
+
+const timeLeft = () => state.timer.endsAt ? state.timer.endsAt - Date.now() : state.timer.left;
+
+function clockText(ms){
+  if(ms <= 0){
+    const s = Math.floor(-ms / 1000);
+    return "+" + Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  }
+  const s = Math.ceil(ms / 1000);
+  return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+}
+
+let audio = null;
+function unlockSound(){
+  try{
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    if(audio.state === "suspended") audio.resume();
+  }catch(e){}
+}
+function ding(){
+  try{
+    unlockSound();
+    if(!audio) return;
+    const now = audio.currentTime;
+    [[880, 0], [1318.5, 0.16]].forEach(([freq, at]) => {
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, now + at);
+      gain.gain.exponentialRampToValueAtTime(0.25, now + at + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + at + 1.1);
+      osc.connect(gain).connect(audio.destination);
+      osc.start(now + at);
+      osc.stop(now + at + 1.2);
+    });
+  }catch(e){}
+}
+
+let ticker = null;
+function tick(){
+  const t = state.timer;
+  if(!t){
+    clearInterval(ticker); ticker = null;
+    return;
+  }
+  if(!ticker) ticker = setInterval(tick, 250);
+  const left = timeLeft();
+  const over = left <= 0;
+  const share = over ? 1 : Math.max(0, Math.min(1, left / t.total));
+  document.querySelectorAll("[data-tl]").forEach(n => n.textContent = clockText(left));
+  document.querySelectorAll("[data-ring]").forEach(n => {
+    const c = +n.getAttribute("stroke-dasharray");
+    n.setAttribute("stroke-dashoffset", over ? 0 : c * (1 - share));
+  });
+  document.querySelectorAll("[data-tbadge], #tpop").forEach(n => {
+    n.classList.toggle("over", over && !!t.endsAt);
+    n.classList.toggle("paused", !t.endsAt);
+  });
+  if(over && t.endsAt && !t.done){
+    t.done = true;
+    ding();
+    const found = findItem(t.itemId);
+    if(found) markStorm(found.it);
+    save();
+    toast("Время вышло — поставил ШТУРМ");
+  }
+}
+
+function markStorm(it){
+  let storm = state.tags.find(x => tagLabel(x) === "ШТУРМ");
+  if(!storm){
+    storm = {id:uid(), label:"ШТУРМ", tone:"slate"};
+    state.tags.push(storm);
+  }
+  it.tags = it.tags || [];
+  if(it.tags.includes(storm.id)) return;
+  it.tags.push(storm.id);
+  const active = document.activeElement;
+  const row = active && active.closest && active.closest(".item");
+  const keepId = row && active.classList.contains("ta") ? row.dataset.id : null;
+  const s = keepId ? active.selectionStart : 0, e = keepId ? active.selectionEnd : 0;
+  const reopen = tpopFor;
+  render();
+  if(keepId){
+    const ta = $section.querySelector('[data-id="' + keepId + '"] .ta');
+    if(ta){ ta.focus({preventScroll:true}); ta.setSelectionRange(s, e); }
+  }
+  if(reopen) openTimer(reopen, true);
+}
+
+function startTimer(itemId, min){
+  unlockSound();
+  const total = Math.round(min * 60000);
+  state.timer = {itemId, total, endsAt:Date.now() + total, left:null, done:false};
+  state.ui.timerMin = min;
+  render();
+  openTimer(itemId, true);
+}
+
+function stopTimer(){
+  state.timer = null;
+  closeTimer();
+  render();
+}
+
+function pauseTimer(){
+  const t = state.timer;
+  if(t.endsAt){ t.left = timeLeft(); t.endsAt = null; }
+  else { t.endsAt = Date.now() + t.left; t.left = null; unlockSound(); }
+  save();
+  openTimer(t.itemId, true);
+}
+
+function addMinute(){
+  const t = state.timer;
+  if(t.endsAt) t.endsAt += 60000; else t.left += 60000;
+  t.total += 60000;
+  if(timeLeft() > 0) t.done = false;
+  save();
+  tick();
+}
+
+const $tpop = document.getElementById("tpop");
+let tpopFor = null;
+
+function openTimer(itemId, keep){
+  if(!keep && tpopFor === itemId){ closeTimer(); return; }
+  closePop();
+  tpopFor = itemId;
+  const found = findItem(itemId);
+  const what = found ? found.it.text.trim() : "";
+  const t = state.timer;
+  $tpop.innerHTML = "";
+  $tpop.classList.remove("over", "paused");
+
+  const title = document.createElement("h2");
+  title.className = "tpop__title";
+  title.textContent = "Таймер";
+  $tpop.appendChild(title);
+  if(what){
+    const p = document.createElement("p");
+    p.className = "tpop__what";
+    p.textContent = what;
+    p.title = what;
+    $tpop.appendChild(p);
+  }
+
+  if(t && t.itemId === itemId){
+    const clock = document.createElement("div");
+    clock.className = "clock";
+    clock.innerHTML = ringSvg(150, 8) + '<span class="clock__time" data-tl></span><span class="clock__sub"></span>';
+    clock.querySelector(".clock__sub").textContent = !t.endsAt ? "пауза" : timeLeft() <= 0 ? "время вышло" : "из " + clockText(t.total);
+    const ctl = document.createElement("div");
+    ctl.className = "tctl";
+    const mk = (label, fn, cls) => {
+      const b = document.createElement("button");
+      b.className = "btn btn--sm" + (cls ? " " + cls : "");
+      b.textContent = label;
+      b.onclick = fn;
+      ctl.appendChild(b);
+      return b;
+    };
+    const first = mk(t.endsAt ? "Пауза" : "Дальше", pauseTimer);
+    mk("+1 мин", addMinute);
+    mk("Стоп", stopTimer);
+    $tpop.append(clock, ctl);
+    $tpop.hidden = false;
+    placeTimer();
+    tick();
+    first.focus({preventScroll:true});
+    return;
+  }
+
+  let chosen = state.ui.timerMin || 3;
+  const presets = document.createElement("div");
+  presets.className = "presets";
+  const custom = document.createElement("label");
+  custom.className = "custom";
+  custom.innerHTML = '<span>Своё:</span><input type="number" min="0.5" max="120" step="0.5" inputmode="decimal" aria-label="Минут"><span>мин</span>';
+  const input = custom.querySelector("input");
+  const sync = () => {
+    presets.querySelectorAll(".pre").forEach(b => b.setAttribute("aria-pressed", +b.dataset.min === chosen ? "true" : "false"));
+    input.value = chosen;
+  };
+  PRESETS.forEach(min => {
+    const b = document.createElement("button");
+    b.className = "pre";
+    b.dataset.min = min;
+    b.textContent = min;
+    b.title = min + " " + plural(min, "минута", "минуты", "минут");
+    b.onclick = () => { chosen = min; sync(); };
+    b.ondblclick = () => startTimer(itemId, min);
+    presets.appendChild(b);
+  });
+  input.oninput = () => {
+    const v = parseFloat(String(input.value).replace(",", "."));
+    if(v > 0){ chosen = Math.min(v, 120); presets.querySelectorAll(".pre").forEach(b => b.setAttribute("aria-pressed", +b.dataset.min === chosen ? "true" : "false")); }
+  };
+  input.onkeydown = e => { if(e.key === "Enter"){ e.preventDefault(); startTimer(itemId, chosen); } };
+  const go = document.createElement("button");
+  go.className = "btn btn--primary";
+  go.textContent = "Запустить";
+  go.onclick = () => startTimer(itemId, chosen);
+  $tpop.append(presets, custom, go);
+  if(t){
+    const note = document.createElement("p");
+    note.className = "tpop__note";
+    note.textContent = "Сейчас идёт таймер у другой записи — запуск его заменит.";
+    $tpop.appendChild(note);
+  }
+  sync();
+  $tpop.hidden = false;
+  placeTimer();
+  go.focus({preventScroll:true});
+}
+
+function closeTimer(){
+  tpopFor = null;
+  $tpop.hidden = true;
+}
+
+function placeTimer(){
+  if(!tpopFor || $tpop.hidden) return;
+  const row = $section.querySelector('[data-id="' + tpopFor + '"]');
+  if(!row){ closeTimer(); return; }
+  const anchor = row.querySelector("[data-tbadge]") || row;
+  const r = anchor.getBoundingClientRect();
+  const w = $tpop.offsetWidth, h = $tpop.offsetHeight;
+  let top = r.bottom + 6;
+  if(top + h > innerHeight - 12) top = Math.max(12, r.top - h - 6);
+  $tpop.style.left = Math.max(12, Math.min(r.right - w, innerWidth - w - 12)) + "px";
+  $tpop.style.top = top + "px";
+}
+
+$tpop.addEventListener("click", e => e.stopPropagation());
+document.addEventListener("click", () => { if(tpopFor) closeTimer(); });
+$tpop.addEventListener("keydown", e => {
+  if(e.key === "Escape"){
+    e.stopPropagation();
+    const id = tpopFor;
+    closeTimer();
+    const row = id && $section.querySelector('[data-id="' + id + '"]');
+    const ta = row && row.querySelector(".ta");
+    if(ta) focusAt(ta, true);
+  }
+});
+window.addEventListener("resize", placeTimer);
+window.addEventListener("scroll", placeTimer, true);
+
+const $ask = document.getElementById("ask");
+const $keys = document.getElementById("keys");
+function ask(text, okLabel){
+  return new Promise(resolve => {
+    document.getElementById("ask-text").textContent = text;
+    document.getElementById("ask-ok").textContent = okLabel || "Удалить";
+    $ask.returnValue = "";
+    $ask.onclose = () => resolve($ask.returnValue === "ok");
+    $ask.showModal();
+    $ask.querySelector('[value="cancel"]').focus();
+  });
+}
+
+function renderTemplate(){
+  $tplBlocks.innerHTML = "";
+  state.blocks.forEach((b, bi) => {
+    const box = document.createElement("div");
+    box.className = "tb";
+    box.style.setProperty("--tone", "var(--t-" + b.tone + ")");
+    box.innerHTML =
+      '<div class="tb__head">' +
+        '<input class="inp inp--title" aria-label="Название раздела">' +
+        '<span class="tb__type"></span>' +
+        '<button class="swatch" title="Сменить цвет" aria-label="Сменить цвет раздела"></button>' +
+        '<button class="tool" data-a="up" title="Выше" aria-label="Переместить раздел выше">↑</button>' +
+        '<button class="tool" data-a="down" title="Ниже" aria-label="Переместить раздел ниже">↓</button>' +
+        '<button class="tool tool--del" data-a="del" title="Удалить раздел" aria-label="Удалить раздел">✕</button>' +
+      '</div>';
+    const title = box.querySelector(".inp--title");
+    const swatch = box.querySelector(".swatch");
+    title.value = b.title;
+    box.querySelector(".tb__type").textContent = TYPE_NAMES[b.type];
+    swatch.style.setProperty("--chip", "var(--t-" + b.tone + ")");
+    title.oninput = () => { b.title = title.value; render(); };
+    swatch.onclick = () => {
+      b.tone = TONES[(TONES.indexOf(b.tone) + 1) % TONES.length];
+      renderTemplate(); render();
+    };
+    const up = box.querySelector('[data-a="up"]');
+    const down = box.querySelector('[data-a="down"]');
+    up.disabled = bi === 0;
+    down.disabled = bi === state.blocks.length - 1;
+    up.onclick = () => moveBlock(bi, bi - 1);
+    down.onclick = () => moveBlock(bi, bi + 1);
+    box.querySelector('[data-a="del"]').onclick = async () => {
+      const what = hasContent(b) ? "Удалить раздел «" + b.title + "» вместе с его записями?" : "Удалить раздел «" + b.title + "»?";
+      if(!await ask(what)) return;
+      state.blocks.splice(bi, 1);
+      delete state.notes[b.id];
+      delete state.raw[b.id];
+      renderTemplate(); render();
+    };
+
+    if(b.type !== "raw"){
+      const fields = document.createElement("div");
+      fields.className = "fields";
+      fields.innerHTML =
+        '<label class="field"><span>Эмодзи заголовка в Mattermost</span><input class="inp inp--mono" data-f="sticker" placeholder="memo"></label>' +
+        '<label class="field"><span>Приписка после заголовка</span><input class="inp inp--mono" data-f="after" placeholder="@кто-то"></label>' +
+        '<label class="field"><span>Префикс быстрой записи</span><input class="inp inp--mono" data-f="prefix" placeholder="+" maxlength="3"></label>';
+      fields.querySelectorAll("input").forEach(inp => {
+        const f = inp.dataset.f;
+        inp.value = b[f] || "";
+        inp.oninput = () => { b[f] = f === "prefix" ? inp.value.replace(/\s/g, "") : inp.value; render(); };
+      });
+      box.appendChild(fields);
+    }
+
+    if(b.type === "quote" || b.type === "raw"){
+      const label = document.createElement("label");
+      label.className = "field";
+      label.innerHTML = '<span></span><textarea class="inp inp--mono"></textarea>';
+      label.querySelector("span").textContent = b.type === "quote"
+        ? "Строки по умолчанию — по одной на строку"
+        : "Текст по умолчанию";
+      const ta = label.querySelector("textarea");
+      ta.value = b.type === "quote" ? (b.preset || []).join("\n") : (b.preset || "");
+      ta.oninput = () => {
+        b.preset = b.type === "quote" ? ta.value.split("\n") : ta.value;
+        save();
+      };
+      box.appendChild(label);
+    }
+
+    $tplBlocks.appendChild(box);
+  });
+  renderTags();
+}
+
+function renderTags(){
+  $tags.innerHTML = "";
+  state.tags.forEach((t, ti) => {
+    const row = document.createElement("div");
+    row.className = "tagrow";
+    row.innerHTML =
+      '<input class="inp inp--tag" aria-label="Название тега" placeholder="ТЕГ">' +
+      '<span class="tag"></span>' +
+      '<button class="swatch" title="Сменить цвет" aria-label="Сменить цвет тега"></button>' +
+      '<button class="tool tool--del" title="Удалить тег" aria-label="Удалить тег">✕</button>';
+    const lab = row.querySelector("input");
+    const preview = row.querySelector(".tag");
+    const [sw, del] = row.querySelectorAll("button");
+    const paint = () => {
+      preview.textContent = tagLabel(t) || "—";
+      preview.style.setProperty("--tag", "var(--t-" + t.tone + ")");
+      sw.style.setProperty("--chip", "var(--t-" + t.tone + ")");
+    };
+    lab.value = t.label;
+    paint();
+    lab.oninput = () => { t.label = lab.value; paint(); render(); };
+    sw.onclick = () => {
+      t.tone = TONES[(TONES.indexOf(t.tone) + 1) % TONES.length];
+      paint(); render();
+    };
+    del.onclick = async () => {
+      if(!await ask("Удалить тег «" + (tagLabel(t) || "без названия") + "»? Он пропадёт и у записей, где стоит.")) return;
+      state.tags = state.tags.filter(x => x.id !== t.id);
+      Object.values(state.notes).forEach(items => items.forEach(i => i.tags = (i.tags||[]).filter(x => x !== t.id)));
+      renderTags(); render();
+    };
+    $tags.appendChild(row);
+  });
 }
 
 function moveBlock(from, to){
   if(to < 0 || to >= state.blocks.length) return;
   const [moved] = state.blocks.splice(from, 1);
   state.blocks.splice(to, 0, moved);
-  renderBlocks();
+  renderTemplate(); render();
 }
 
-/* ---------------- toolbar ---------------- */
 let toastTimer;
-function toast(msg){
+function toast(msg, actionLabel, action){
   const el = document.getElementById("toast");
-  el.textContent = msg;
+  el.textContent = "";
+  const text = document.createElement("span");
+  text.textContent = msg;
+  el.appendChild(text);
+  el.classList.toggle("act", !!action);
+  if(action){
+    const btn = document.createElement("button");
+    btn.textContent = actionLabel;
+    btn.onclick = () => { el.classList.remove("on"); action(); };
+    const hint = document.createElement("kbd");
+    hint.textContent = "Ctrl+Z";
+    el.append(btn, hint);
+  }
   el.classList.add("on");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove("on"), 1800);
+  toastTimer = setTimeout(() => el.classList.remove("on"), action ? 6000 : 1800);
 }
+
+const undoStack = [];
+function removeItem(b, ii){
+  const items = notesOf(b);
+  const it = items[ii];
+  if(!it) return;
+  const timer = state.timer && state.timer.itemId === it.id ? Object.assign({}, state.timer) : null;
+  items.splice(ii, 1);
+  undoStack.push({blockId:b.id, index:ii, item:it, timer});
+  if(undoStack.length > 30) undoStack.shift();
+  render();
+  if(it.text.trim() || (it.tags || []).length) toast("Запись удалена", "Вернуть", undoRemove);
+}
+
+function undoRemove(){
+  const u = undoStack.pop();
+  if(!u) return false;
+  const b = state.blocks.find(x => x.id === u.blockId);
+  if(!b) return undoRemove();
+  const items = notesOf(b);
+  const at = Math.min(u.index, items.length);
+  items.splice(at, 0, u.item);
+  if(u.timer && !state.timer) state.timer = u.timer;
+  state.ui.tab = b.id;
+  render();
+  focusItem(at);
+  const row = $section.querySelectorAll(".item")[at];
+  if(row){ row.classList.add("fresh"); }
+  toast("Запись возвращена");
+  return true;
+}
+
+const $quick = document.getElementById("quick");
+const $quickIn = document.getElementById("quick-in");
+const $quickTo = document.getElementById("quick-to");
+const $quickTags = document.getElementById("quick-tags");
+
+function parseQuick(raw){
+  let text = raw.replace(/^\s+/, "");
+  let target = current();
+  let switched = false;
+  const m = /^(\S+)(?:\s+([\s\S]*))?$/.exec(text);
+  if(m){
+    const b = state.blocks.find(x => x.type !== "raw" && x.prefix && x.prefix === m[1]);
+    if(b && (m[2] !== undefined || /\s$/.test(raw))){ target = b; switched = true; text = m[2] || ""; }
+  }
+  const tags = [];
+  text = text.replace(/(^|\s)#([^\s#]+)/g, (all, sp, word) => {
+    const t = state.tags.find(x => tagLabel(x) === word.toUpperCase());
+    if(!t) return all;
+    if(!tags.includes(t.id)) tags.push(t.id);
+    return sp;
+  });
+  text = text.replace(/\s{2,}/g, " ").trim();
+  const item = {id:uid(), text, tags};
+  const wrap = (mark, key) => {
+    if(text.length > mark.length * 2 && text.startsWith(mark) && text.endsWith(mark)){
+      text = text.slice(mark.length, -mark.length).trim();
+      item[key] = true;
+    }
+  };
+  wrap("**", "bold"); wrap("~~", "strike");
+  item.text = text;
+  return {target, switched, item};
+}
+
+function quickPlaceholder(){
+  const parts = state.blocks.filter(b => b.type !== "raw" && b.prefix)
+    .map(b => b.prefix + " " + (b.title || "").trim().toLowerCase());
+  return "Запись в текущий раздел" + (parts.length ? " · " + parts.join(" · ") : "") + " · #тег";
+}
+
+function syncQuick(){
+  $quickIn.placeholder = quickPlaceholder();
+  const {target, switched, item} = parseQuick($quickIn.value);
+  const ok = target && target.type !== "raw";
+  $quickTo.classList.toggle("none", !ok);
+  $quickTo.classList.toggle("moved", ok && switched && target !== current());
+  $quickTo.style.setProperty("--tone", ok ? "var(--t-" + target.tone + ")" : "var(--faint)");
+  $quickTo.children[1].textContent = ok ? (target.title || "Без названия") : "выберите раздел";
+  $quickTo.title = ok ? "Запись уйдёт в «" + target.title + "»" : "В этот раздел нельзя писать строками — начните с префикса";
+  $quickTags.innerHTML = "";
+  item.tags.forEach(id => {
+    const t = state.tags.find(x => x.id === id);
+    const span = document.createElement("span");
+    span.className = "tag";
+    span.style.setProperty("--tag", "var(--t-" + t.tone + ")");
+    span.textContent = tagLabel(t);
+    $quickTags.appendChild(span);
+  });
+}
+
+$quickIn.addEventListener("input", syncQuick);
+$quickIn.addEventListener("keydown", e => {
+  if(e.key === "Escape"){ e.preventDefault(); $quickIn.blur(); }
+  if(e.key === "ArrowUp" && !$quickIn.value){
+    const tas = $section.querySelectorAll(".ta");
+    if(tas.length){ e.preventDefault(); focusAt(tas[tas.length - 1], true); }
+  }
+});
+$quick.addEventListener("submit", e => {
+  e.preventDefault();
+  const {target, item} = parseQuick($quickIn.value);
+  if(!target || target.type === "raw"){ toast("Начните с префикса раздела, например «+ »"); return; }
+  if(!item.text && !item.tags.length){
+    if(target !== current()){ state.ui.tab = target.id; $quickIn.value = ""; render(); syncQuick(); }
+    return;
+  }
+  const items = notesOf(target);
+  const last = items[items.length - 1];
+  if(isBlank(last)) items[items.length - 1] = item; else items.push(item);
+  state.ui.tab = target.id;
+  $quickIn.value = "";
+  render();
+  syncQuick();
+  const row = $section.querySelector('[data-id="' + item.id + '"]');
+  if(row){
+    row.classList.add("fresh");
+    row.scrollIntoView({block:"nearest"});
+  }
+});
 
 function copyMd(){
   const md = markdown();
-  const done = () => toast("Markdown скопирован");
+  const done = () => toast("Скопировано — вставляйте в Mattermost");
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(md).then(done, fallback);
   } else fallback();
@@ -901,79 +1817,208 @@ function copyMd(){
     ta.style.position = "fixed"; ta.style.opacity = "0";
     document.body.appendChild(ta); ta.select();
     try{ document.execCommand("copy"); done(); }
-    catch(e){ toast("Не получилось скопировать — выделите текст справа"); }
+    catch(e){ toast("Не получилось скопировать"); }
     ta.remove();
   }
 }
 
-document.getElementById("copy").onclick = copyMd;
-document.getElementById("copy2").onclick = copyMd;
+async function newRetro(){
+  const dirty = state.blocks.some(b => b.type === "list" && hasContent(b));
+  if(dirty && !await ask("Начать новое ретро? Записи текущего ретро пропадут, шаблон останется.", "Начать заново")) return;
+  startRetro(state);
+  state.timer = null;
+  state.ui.caret = null;
+  closeTimer();
+  state.ui.tab = state.blocks[0] && state.blocks[0].id;
+  render();
+  window.scrollTo({top:0});
+  toast("Новое ретро");
+}
 
-document.getElementById("reset").onclick = () => {
-  const ui = state.ui;
-  state = sample(); state.ui = ui;
-  renderTags(); renderBlocks(); toast("Шаблон загружен");
-};
-document.getElementById("clear").onclick = () => {
-  state = {
-    ui: state.ui,
-    tags: state.tags,
-    blocks: [{id:uid(), type:"list", sticker:"", title:"НОВЫЙ БЛОК", after:"", tone:"slate",
-              items:[{id:uid(), text:"", tags:[]}], text:""}]
+const $menu = document.getElementById("menu");
+const $menubtn = document.getElementById("menubtn");
+function setMenu(open){
+  $menu.hidden = !open;
+  $menubtn.setAttribute("aria-expanded", open ? "true" : "false");
+  if(open) $menu.querySelector("button").focus();
+}
+$menubtn.onclick = e => { e.stopPropagation(); setMenu($menu.hidden); };
+document.addEventListener("click", e => { if(!$menu.hidden && !$menu.contains(e.target)) setMenu(false); });
+$menu.querySelectorAll("[data-m]").forEach(btn => {
+  btn.onclick = () => {
+    setMenu(false);
+    const m = btn.dataset.m;
+    if(m === "new") newRetro();
+    if(m === "template") setDrawer(true);
+    if(m === "copy") copyMd();
+    if(m === "keys") $keys.showModal();
   };
-  renderBlocks(); toast("Всё очищено");
-};
+});
+
+const $drawer = document.getElementById("drawer");
+const $scrim = document.getElementById("scrim");
+let drawerReturn = null;
+function setDrawer(open, focus){
+  $drawer.hidden = !open;
+  $scrim.hidden = !open;
+  document.body.classList.toggle("locked", open);
+  if(open){
+    drawerReturn = document.activeElement;
+    renderTemplate();
+    if(focus === "tags"){
+      $tags.scrollIntoView({block:"center"});
+      const first = $tags.querySelector("input");
+      if(first) first.focus();
+    } else {
+      document.getElementById("drawer-close").focus();
+    }
+  } else if(drawerReturn && drawerReturn.focus && document.contains(drawerReturn)){
+    drawerReturn.focus();
+  }
+}
+document.getElementById("drawer-close").onclick = () => setDrawer(false);
+$scrim.onclick = () => setDrawer(false);
 
 document.querySelectorAll("[data-add]").forEach(btn => {
   btn.onclick = () => {
     const type = btn.dataset.add;
-    state.blocks.push({
+    const b = {
       id:uid(), type,
       sticker: type === "raw" ? "" : "memo",
-      title: type === "quote" ? "ЗАПИСЬ" : type === "raw" ? "Свободный блок" : "НОВЫЙ БЛОК",
-      after:"", tone:"slate",
-      items: type === "raw" ? [] : [{id:uid(), text:"", tags:[]}],
-      text:""
-    });
-    renderBlocks();
-    $blocks.lastElementChild.scrollIntoView({block:"nearest", behavior:"smooth"});
-  };
-});
-
-/* collapsible bottom panels */
-function syncPanels(){
-  [["md","panel-md"],["tags","panel-tags"]].forEach(([key,id]) => {
-    const panel = document.getElementById(id);
-    const open = !!state.ui[key];
-    panel.classList.toggle("panel--closed", !open);
-    panel.querySelector(".panel__toggle").setAttribute("aria-expanded", open ? "true" : "false");
-  });
-  save();
-}
-document.querySelectorAll("[data-toggle]").forEach(btn => {
-  btn.onclick = () => {
-    const key = btn.dataset.toggle;
-    state.ui[key] = !state.ui[key];
-    syncPanels();
-    if(state.ui[key]) btn.closest(".panel").scrollIntoView({block:"nearest", behavior:"smooth"});
+      title: type === "quote" ? "ЗАПИСЬ" : type === "raw" ? "Свободный блок" : "НОВЫЙ РАЗДЕЛ",
+      after:"", tone:"slate", prefix:"",
+      preset: type === "quote" ? [] : type === "raw" ? "" : undefined
+    };
+    state.blocks.push(b);
+    if(type === "raw") state.raw[b.id] = "";
+    renderTemplate(); render();
+    const inputs = $tplBlocks.querySelectorAll(".inp--title");
+    const last = inputs[inputs.length - 1];
+    if(last){ last.focus(); last.select(); }
   };
 });
 
 document.getElementById("addtag").onclick = () => {
-  state.tags.push({id:uid(), label:"XL", code:"x-large", tone:"blue"});
-  state.ui.tags = true;
-  syncPanels(); renderTags(); renderBlocks();
+  state.tags.push({id:uid(), label:"", tone:TONES[state.tags.length % TONES.length]});
+  renderTags(); render();
+  const inputs = $tags.querySelectorAll("input");
+  const last = inputs[inputs.length - 1];
+  if(last) last.focus();
 };
 
+document.getElementById("copy").onclick = copyMd;
+
 document.addEventListener("keydown", e => {
-  if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "c"){
+  if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key.toLowerCase() === "c" || e.key.toLowerCase() === "с")){
     e.preventDefault(); copyMd();
+  }
+  if(e.altKey && !e.ctrlKey && !e.metaKey && /^Digit[1-9]$/.test(e.code) && $drawer.hidden){
+    const b = state.blocks[+e.code.slice(5) - 1];
+    if(b){ e.preventDefault(); openTab(b.id, true); }
+  }
+  if(e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && $drawer.hidden && !$ask.open && !$keys.open){
+    e.preventDefault();
+    const n = state.blocks.length;
+    const i = state.blocks.indexOf(current());
+    if(n) openTab(state.blocks[(i + (e.key === "ArrowRight" ? 1 : -1) + n) % n].id, true);
+  }
+  const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  if(e.key === "/" && !typing && !$ask.open && !$keys.open && $drawer.hidden){
+    e.preventDefault();
+    $quickIn.focus();
+  }
+  if((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && (e.key === "z" || e.key === "Z" || e.key === "я" || e.key === "Я") && !typing && undoStack.length){
+    e.preventDefault();
+    undoRemove();
+  }
+  if(e.key === "?" && !typing && !$keys.open){
+    e.preventDefault();
+    $keys.showModal();
+  }
+  if(e.key === "Escape"){
+    if($ask.open || $keys.open) return;
+    if(!$menu.hidden){ setMenu(false); $menubtn.focus(); }
+    else if(tpopFor) closeTimer();
+    else if(!$drawer.hidden) setDrawer(false);
   }
 });
 
-syncPanels();
-renderTags();
-renderBlocks();
+const THEME_NAMES = {auto:"как в системе", light:"светлая", dark:"тёмная"};
+const THEME_ICONS = {
+  auto:'<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 3a7 7 0 0 0 0 14Z" fill="currentColor"/></svg>',
+  light:'<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="3.6"/><path d="M10 1.8v2M10 16.2v2M1.8 10h2M16.2 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4"/></svg>',
+  dark:'<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M16.5 12.6A7 7 0 0 1 7.4 3.5a7 7 0 1 0 9.1 9.1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'
+};
+const $theme = document.getElementById("theme");
+function readTheme(){
+  try{ const t = localStorage.getItem("retro-theme"); return THEME_NAMES[t] ? t : "auto"; }catch(e){ return "auto"; }
+}
+function applyTheme(t){
+  if(t === "auto") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = t;
+  $theme.innerHTML = THEME_ICONS[t];
+  $theme.title = "Тема: " + THEME_NAMES[t] + ". Нажмите, чтобы сменить";
+  $theme.setAttribute("aria-label", $theme.title);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.content = getComputedStyle(document.body).getPropertyValue("--surface").trim() || "#fdfcf9";
+}
+$theme.onclick = () => {
+  const order = ["auto", "light", "dark"];
+  const next = order[(order.indexOf(readTheme()) + 1) % order.length];
+  try{ localStorage.setItem("retro-theme", next); }catch(e){}
+  applyTheme(next);
+  toast("Тема: " + THEME_NAMES[next]);
+};
+applyTheme(readTheme());
+window.addEventListener("storage", e => { if(e.key === "retro-theme") applyTheme(readTheme()); });
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => applyTheme(readTheme()));
+
+const syncOnline = () => {
+  if(navigator.onLine) $saved.textContent = $saved.textContent.replace(" · без сети", "");
+  else if(!$saved.classList.contains("bad")) $saved.textContent = "✓ сохранено · без сети";
+};
+window.addEventListener("online", syncOnline);
+window.addEventListener("offline", syncOnline);
+
+if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+
+render();
+
+(function restoreCaret(){
+  const c = state.ui.caret;
+  const row = c && $section.querySelector('[data-id="' + c.id + '"]');
+  const ta = row && row.querySelector(".ta");
+  if(!ta) return;
+  ta.focus({preventScroll:true});
+  const pos = Math.min(c.pos || 0, ta.value.length);
+  ta.setSelectionRange(pos, pos);
+  row.scrollIntoView({block:"center"});
+})();
+
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+window.addEventListener("storage", e => {
+  if(e.key !== KEY || !e.newValue) return;
+  try{
+    const next = JSON.parse(e.newValue);
+    next.ui = next.ui || {}; next.notes = next.notes || {}; next.raw = next.raw || {};
+    const active = document.activeElement;
+    const row = active && active.closest && active.closest(".item");
+    const keepId = row && active.classList.contains("ta") ? row.dataset.id : null;
+    const pos = keepId ? active.selectionStart : 0;
+    next.ui.tab = state.ui.tab;
+    next.ui.caret = state.ui.caret;
+    state = next;
+    syncing = true;
+    closePop(); closeTimer();
+    render();
+    if(!$drawer.hidden) renderTemplate();
+    syncing = false;
+    const ta = keepId && $section.querySelector('[data-id="' + keepId + '"] .ta');
+    if(ta){ ta.focus({preventScroll:true}); ta.setSelectionRange(pos, pos); }
+  }catch(err){ syncing = false; }
+});
 </script>
 
 </body></html>
