@@ -124,6 +124,25 @@ button{cursor:pointer;background:none;border:0;padding:0}
   background:var(--accent);transform:rotate(45deg);
 }
 .saved{color:var(--faint);font-size:12.5px;white-space:nowrap;transition:color .3s}
+.watch{
+  display:flex;align-items:center;gap:2px;flex:none;
+  padding:2px;
+  border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+  color:var(--faint);
+}
+.watch__time{display:flex;align-items:center;height:30px;padding:0 9px 0 8px;color:inherit}
+.watch__time svg{display:block;height:19px;width:auto;overflow:visible}
+.seg7 .off{fill:currentColor;opacity:.13}
+.seg7 .lit{fill:currentColor}
+.watch.on{color:var(--ink)}
+.watch.paused{color:var(--muted)}
+.watch__btn{
+  width:30px;height:30px;border-radius:4px;
+  display:grid;place-items:center;color:var(--muted);
+}
+.watch__btn:hover{background:var(--surface-3);color:var(--ink)}
+.watch__btn:disabled{opacity:.35;cursor:default;background:none}
+.watch__btn svg{width:14px;height:14px;display:block}
 .saved.flash{color:var(--accent-ink)}
 .saved.bad{color:var(--t-red)}
 .spacer{flex:1 1 auto}
@@ -142,6 +161,17 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .btn--sm{padding:4px 10px;font-size:12.5px}
 .btn--icon{width:36px;padding:7px 0;text-align:center;font-size:16px;line-height:1.2}
 .btn--theme{display:grid;place-items:center;height:36px;color:var(--muted)}
+.seg{display:flex;padding:2px;gap:2px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.seg button{
+  display:grid;place-items:center;width:32px;height:30px;border-radius:4px;
+  color:var(--muted);font-size:13px;font-weight:500;
+}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface-3);color:var(--ink)}
+.seg svg{width:16px;height:16px;display:block}
+.part{scroll-margin-top:64px}
+.feed .part + .part{margin-top:34px;padding-top:30px;border-top:1px solid var(--line-soft)}
+.feed .part:last-child{min-height:calc(100vh - 220px)}
 .btn--theme:hover{color:var(--ink)}
 .btn--theme svg{width:17px;height:17px;display:block}
 
@@ -509,9 +539,13 @@ textarea.inp{resize:vertical;min-height:62px;line-height:1.5}
 
 @media (max-width:640px){
   .page{padding:0}
-  .bar{padding:14px 16px 12px}
+  .bar{padding:14px 16px 12px;flex-wrap:wrap;row-gap:10px}
+  .bar .spacer{display:none}
+  .bar > .watch{margin-left:auto}
+  .acts{width:100%;justify-content:flex-end}
   .saved{display:none}
   .btn--copy-long{display:none}
+  .acts{gap:6px}
   .sheet{border-radius:0;border-left:0;border-right:0}
   .tabs{border-radius:0;padding:0 8px}
   .section{padding:22px 16px 28px 42px}
@@ -525,7 +559,8 @@ textarea.inp{resize:vertical;min-height:62px;line-height:1.5}
   .quick__key{display:none}
   .drawer__body{padding:16px}
 }
-@media (min-width:641px){.btn--copy-short{display:none}}
+@media (max-width:1020px){.saved{display:none}}
+@media (min-width:641px){.btn--copy-short{display:none}.bar > .watch{margin-right:-6px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -534,7 +569,16 @@ textarea.inp{resize:vertical;min-height:62px;line-height:1.5}
     <h1 class="brand">Ретро</h1>
     <span class="saved" id="saved"></span>
     <span class="spacer"></span>
+    <div class="watch" id="watch" role="group" aria-label="Секундомер ретро">
+      <span class="watch__time" id="watch-time" role="timer"></span>
+      <button class="watch__btn" id="watch-go"></button>
+      <button class="watch__btn" id="watch-stop" title="Стоп — сбросить на ноль" aria-label="Остановить и сбросить секундомер"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="4" y="4" width="8" height="8" rx="1.2" fill="currentColor"/></svg></button>
+    </div>
     <div class="acts">
+      <div class="seg" id="view" role="group" aria-label="Вид">
+        <button data-view="tabs" title="Вкладки — по разделу на экран (Alt+V)"><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="6" width="15" height="11" rx="1.5"/><path d="M2.5 6V4.5A1.5 1.5 0 0 1 4 3h4a1.5 1.5 0 0 1 1.5 1.5V6"/></svg></button>
+        <button data-view="feed" title="Лента — все разделы подряд (Alt+V)"><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4.5h14M3 8.5h10M3 12.5h14M3 16.5h8"/></svg></button>
+      </div>
       <button class="btn btn--icon btn--theme" id="theme"></button>
       <button class="btn btn--primary" id="copy" title="Ctrl+Shift+C">
         <span class="btn--copy-long">Скопировать в Mattermost</span><span class="btn--copy-short">Копировать</span>
@@ -611,6 +655,7 @@ textarea.inp{resize:vertical;min-height:62px;line-height:1.5}
     <dl>
       <dt><kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd></dt><dd>Соседняя вкладка</dd>
       <dt><kbd>Alt</kbd> + <kbd>1</kbd>…<kbd>9</kbd></dt><dd>Вкладка по номеру</dd>
+      <dt><kbd>Alt</kbd> + <kbd>V</kbd></dt><dd>Вкладки или лента</dd>
       <dt><kbd>/</kbd></dt><dd>Строка быстрой записи внизу; <kbd>+</kbd> <kbd>-</kbd> <kbd>?</kbd> <kbd>!</kbd> <kbd>*</kbd> и пробел в начале — раздел, <kbd>#тег</kbd> — тег</dd>
       <dt><kbd>Enter</kbd></dt><dd>Новая запись ниже</dd>
       <dt><kbd>Shift</kbd> + <kbd>Enter</kbd></dt><dd>Перенос внутри записи</dd>
@@ -816,17 +861,20 @@ function refresh(){
     const c = b ? filled(b) : 0;
     n.textContent = c || "";
   });
-  const b = current();
-  const cnt = document.getElementById("count");
-  if(b && cnt){
-    const n = filled(b);
-    cnt.textContent = b.type === "list" ? (n ? n + " " + plural(n, "запись", "записи", "записей") : "пока пусто") : "";
-  }
-  const add = $section.querySelector(".add-item");
-  if(b && add){
-    const items = notesOf(b);
-    add.hidden = isBlank(items[items.length - 1]);
-  }
+  $section.querySelectorAll(".part").forEach(part => {
+    const b = state.blocks.find(x => x.id === part.dataset.part);
+    if(!b) return;
+    const cnt = part.querySelector(".section__count");
+    if(cnt){
+      const n = filled(b);
+      cnt.textContent = b.type === "list" ? (n ? n + " " + plural(n, "запись", "записи", "записей") : "пока пусто") : "";
+    }
+    const add = part.querySelector(".add-item");
+    if(add){
+      const items = notesOf(b);
+      add.hidden = isBlank(items[items.length - 1]);
+    }
+  });
   save();
 }
 
@@ -853,31 +901,103 @@ function renderTabs(){
     tab.innerHTML = '<span class="tab__dot"></span><span></span><span class="tab__n"></span>';
     tab.children[1].textContent = b.title || "Без названия";
     tab.children[2].dataset.n = b.id;
+    tab.dataset.tab = b.id;
     tab.onclick = () => openTab(b.id);
     $tabs.appendChild(tab);
   });
 }
 
+const isFeed = () => state.ui.view === "feed";
+function partOf(id){ return $section.querySelector('[data-part="' + id + '"]'); }
+
+function markTab(id){
+  $tabs.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.tab === id ? "true" : "false"));
+  const sel = $tabs.querySelector('[aria-selected="true"]');
+  if(sel) sel.scrollIntoView({block:"nearest", inline:"nearest"});
+}
+
+let spyPause = 0;
 function openTab(id, focusFirst){
   closePop();
   state.ui.tab = id;
-  render();
-  const sel = $tabs.querySelector('[aria-selected="true"]');
-  if(sel) sel.scrollIntoView({block:"nearest", inline:"nearest"});
+  if(isFeed()){
+    markTab(id);
+    syncQuick();
+    save(true);
+    const part = partOf(id);
+    if(part){
+      spyPause = Date.now() + 900;
+      part.scrollIntoView({block:"start", behavior: focusFirst ? "auto" : "smooth"});
+      setTimeout(spy, 950);
+    }
+  } else {
+    render();
+    markTab(id);
+  }
   if(focusFirst){
-    const tas = $section.querySelectorAll(".ta, .raw-ta");
+    const part = partOf(id);
+    const tas = part ? part.querySelectorAll(".ta, .raw-ta") : [];
     if(tas.length) focusAt(tas[tas.length - 1], true);
   }
 }
+
+function spy(){
+  if(!isFeed() || Date.now() < spyPause) return;
+  const line = $tabs.getBoundingClientRect().bottom + 24;
+  let pick = null;
+  $section.querySelectorAll(".part").forEach(part => { if(part.getBoundingClientRect().top <= line) pick = part; });
+  if(!pick) pick = $section.querySelector(".part");
+  const focused = document.activeElement && document.activeElement.closest && document.activeElement.closest(".part");
+  if(focused){
+    const r = focused.getBoundingClientRect();
+    if(r.bottom > line && r.top < innerHeight) pick = focused;
+  }
+  if(pick && pick.dataset.part !== state.ui.tab){
+    state.ui.tab = pick.dataset.part;
+    markTab(state.ui.tab);
+    syncQuick();
+    save(true);
+  }
+}
+window.addEventListener("scroll", spy, {passive:true});
+const pickPart = e => {
+  if(!isFeed()) return;
+  const part = e.target.closest && e.target.closest(".part");
+  if(part && part.dataset.part !== state.ui.tab){
+    state.ui.tab = part.dataset.part;
+    markTab(state.ui.tab);
+    syncQuick();
+    save(true);
+  }
+};
+["focusin", "pointerdown", "input"].forEach(type => $section.addEventListener(type, pickPart));
 
 let drag = null;
 
 function render(){
   renderTabs();
   $section.innerHTML = "";
-  const b = current();
-  if(!b){ refresh(); return; }
-  $section.style.setProperty("--tone", "var(--t-" + b.tone + ")");
+  document.body.classList.toggle("feed", isFeed());
+  syncView();
+  syncWatch();
+  const cur = current();
+  if(!cur){ refresh(); return; }
+  (isFeed() ? state.blocks : [cur]).forEach(b => $section.appendChild(renderPart(b)));
+
+  $section.querySelectorAll(".ta").forEach(grow);
+  if(state.timer && !findItem(state.timer.itemId)){ state.timer = null; closeTimer(); }
+  if(tpopFor && !$section.querySelector('[data-id="' + tpopFor + '"]')) closeTimer();
+  tick();
+  placeTimer();
+  syncQuick();
+  refresh();
+}
+
+function renderPart(b){
+  const part = document.createElement("div");
+  part.className = "part";
+  part.dataset.part = b.id;
+  part.style.setProperty("--tone", "var(--t-" + b.tone + ")");
 
   const head = document.createElement("div");
   head.className = "section__head";
@@ -900,9 +1020,8 @@ function render(){
   }
   const count = document.createElement("span");
   count.className = "section__count";
-  count.id = "count";
   head.appendChild(count);
-  $section.appendChild(head);
+  part.appendChild(head);
 
   if(b.type === "raw"){
     const ta = document.createElement("textarea");
@@ -910,13 +1029,13 @@ function render(){
     ta.value = state.raw[b.id] || "";
     ta.setAttribute("aria-label", b.title || "Свободный Markdown");
     ta.oninput = () => { state.raw[b.id] = ta.value; refresh(); };
-    $section.appendChild(ta);
+    part.appendChild(ta);
   } else {
     const items = notesOf(b);
     const list = document.createElement("div");
     list.className = "items";
     items.forEach((it, ii) => list.appendChild(itemRow(b, items, it, ii)));
-    $section.appendChild(list);
+    part.appendChild(list);
 
     const add = document.createElement("button");
     add.className = "add-item";
@@ -927,18 +1046,11 @@ function render(){
         items.push(newItem());
         render();
       }
-      focusItem(items.length - 1);
+      focusItem(items.length - 1, b.id);
     };
-    $section.appendChild(add);
+    part.appendChild(add);
   }
-
-  $section.querySelectorAll(".ta").forEach(grow);
-  if(state.timer && !findItem(state.timer.itemId)){ state.timer = null; closeTimer(); }
-  if(tpopFor && !$section.querySelector('[data-id="' + tpopFor + '"]')) closeTimer();
-  tick();
-  placeTimer();
-  syncQuick();
-  refresh();
+  return part;
 }
 
 function itemRow(b, items, it, ii){
@@ -1038,10 +1150,10 @@ function itemRow(b, items, it, ii){
     if(e.key === "Enter" && !e.shiftKey){
       e.preventDefault();
       if(isBlank(it)) return;
-      if(isBlank(items[ii + 1])){ focusItem(ii + 1); return; }
+      if(isBlank(items[ii + 1])){ focusItem(ii + 1, b.id); return; }
       items.splice(ii + 1, 0, newItem());
       render();
-      focusItem(ii + 1);
+      focusItem(ii + 1, b.id);
     }
     if(e.altKey && !e.ctrlKey && (e.key === "t" || e.key === "T" || e.key === "е" || e.key === "Е")){
       e.preventDefault();
@@ -1155,9 +1267,16 @@ function focusAt(ta, toEnd){
   ta.setSelectionRange(pos, pos);
 }
 
-function focusItem(index){
-  const tas = $section.querySelectorAll(".ta");
+function focusItem(index, blockId){
+  const part = partOf(blockId || current().id);
+  const tas = part ? part.querySelectorAll(".ta") : [];
   if(tas[index]) focusAt(tas[index], true);
+}
+
+function focusRow(itemId){
+  const ta = $section.querySelector('[data-id="' + itemId + '"] .ta');
+  if(ta) focusAt(ta, true);
+  return ta;
 }
 
 function moveItem(b, from, to, keepFocus){
@@ -1167,7 +1286,8 @@ function moveItem(b, from, to, keepFocus){
   items.splice(to, 0, moved);
   render();
   if(keepFocus){
-    const handles = $section.querySelectorAll(".handle");
+    const part = partOf(b.id);
+    const handles = part ? part.querySelectorAll(".handle") : [];
     if(handles[to]) handles[to].focus();
   }
 }
@@ -1222,7 +1342,7 @@ function toggleTag(it, tagId, ii){
   const opts = [...$pop.querySelectorAll(".pop__opt")];
   const focused = opts.indexOf(document.activeElement);
   render();
-  const row = $section.querySelectorAll(".item")[ii];
+  const row = $section.querySelector('[data-id="' + it.id + '"]');
   if(!row || !popFor){ closePop(); return; }
   popFor.anchor = row.querySelector(".tagbtn");
   popFor.anchor.setAttribute("aria-expanded", "true");
@@ -1254,9 +1374,9 @@ $pop.addEventListener("keydown", e => {
   }
   if(e.key === "Escape" || e.key === "Tab"){
     e.preventDefault();
-    const ii = popFor && popFor.ii;
+    const id = popFor && popFor.it.id;
     closePop();
-    if(ii != null) focusItem(ii);
+    if(id) focusRow(id);
   }
 });
 document.addEventListener("click", e => { if(popFor && !$pop.contains(e.target)) closePop(); });
@@ -1664,7 +1784,7 @@ function moveBlock(from, to){
 }
 
 let toastTimer;
-function toast(msg, actionLabel, action){
+function toast(msg, actionLabel, action, hintKey){
   const el = document.getElementById("toast");
   el.textContent = "";
   const text = document.createElement("span");
@@ -1675,9 +1795,12 @@ function toast(msg, actionLabel, action){
     const btn = document.createElement("button");
     btn.textContent = actionLabel;
     btn.onclick = () => { el.classList.remove("on"); action(); };
-    const hint = document.createElement("kbd");
-    hint.textContent = "Ctrl+Z";
-    el.append(btn, hint);
+    el.appendChild(btn);
+    if(hintKey){
+      const hint = document.createElement("kbd");
+      hint.textContent = hintKey;
+      el.appendChild(hint);
+    }
   }
   el.classList.add("on");
   clearTimeout(toastTimer);
@@ -1694,7 +1817,7 @@ function removeItem(b, ii){
   undoStack.push({blockId:b.id, index:ii, item:it, timer});
   if(undoStack.length > 30) undoStack.shift();
   render();
-  if(it.text.trim() || (it.tags || []).length) toast("Запись удалена", "Вернуть", undoRemove);
+  if(it.text.trim() || (it.tags || []).length) toast("Запись удалена", "Вернуть", undoRemove, "Ctrl+Z");
 }
 
 function undoRemove(){
@@ -1708,9 +1831,9 @@ function undoRemove(){
   if(u.timer && !state.timer) state.timer = u.timer;
   state.ui.tab = b.id;
   render();
-  focusItem(at);
-  const row = $section.querySelectorAll(".item")[at];
-  if(row){ row.classList.add("fresh"); }
+  const ta = focusRow(u.item.id);
+  const row = ta && ta.closest(".item");
+  if(row){ row.classList.add("fresh"); row.scrollIntoView({block:"nearest"}); }
   toast("Запись возвращена");
   return true;
 }
@@ -1779,7 +1902,8 @@ $quickIn.addEventListener("input", syncQuick);
 $quickIn.addEventListener("keydown", e => {
   if(e.key === "Escape"){ e.preventDefault(); $quickIn.blur(); }
   if(e.key === "ArrowUp" && !$quickIn.value){
-    const tas = $section.querySelectorAll(".ta");
+    const part = partOf(current().id);
+    const tas = part ? part.querySelectorAll(".ta") : [];
     if(tas.length){ e.preventDefault(); focusAt(tas[tas.length - 1], true); }
   }
 });
@@ -1828,6 +1952,7 @@ async function newRetro(){
   startRetro(state);
   state.timer = null;
   state.ui.caret = null;
+  state.watch = null;
   closeTimer();
   state.ui.tab = state.blocks[0] && state.blocks[0].id;
   render();
@@ -1916,6 +2041,11 @@ document.addEventListener("keydown", e => {
     const b = state.blocks[+e.code.slice(5) - 1];
     if(b){ e.preventDefault(); openTab(b.id, true); }
   }
+  if(e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && e.code === "KeyV" && $drawer.hidden && !$ask.open && !$keys.open){
+    e.preventDefault();
+    setView(isFeed() ? "tabs" : "feed");
+    toast(isFeed() ? "Лента: все разделы подряд" : "Вкладки: по разделу на экран");
+  }
   if(e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && $drawer.hidden && !$ask.open && !$keys.open){
     e.preventDefault();
     const n = state.blocks.length;
@@ -1942,6 +2072,115 @@ document.addEventListener("keydown", e => {
     else if(!$drawer.hidden) setDrawer(false);
   }
 });
+
+const $watch = document.getElementById("watch");
+const $watchTime = document.getElementById("watch-time");
+const $watchGo = document.getElementById("watch-go");
+const $watchStop = document.getElementById("watch-stop");
+const PLAY_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.5v9l7.5-4.5Z" fill="currentColor"/></svg>';
+const PAUSE_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="4" y="3.5" width="2.6" height="9" rx=".8" fill="currentColor"/><rect x="9.4" y="3.5" width="2.6" height="9" rx=".8" fill="currentColor"/></svg>';
+const watchMs = () => {
+  const w = state.watch;
+  if(!w) return 0;
+  return Math.max(0, (w.acc || 0) + (w.startedAt ? Date.now() - w.startedAt : 0));
+};
+function watchText(ms){
+  const sec = Math.floor(ms / 1000), pad = n => String(n).padStart(2, "0");
+  return Math.min(9, Math.floor(sec / 3600)) + ":" + pad(Math.floor(sec % 3600 / 60)) + ":" + pad(sec % 60);
+}
+function watchWords(ms){
+  const min = Math.floor(ms / 60000), h = Math.floor(min / 60), m = min % 60;
+  return (h ? h + " ч " : "") + m + " мин";
+}
+
+const SEG_SHAPES = {
+  a:[[2,0],[8,0],[9,1],[8,2],[2,2],[1,1]],
+  b:[[9,1],[10,2],[10,8],[9,9],[8,8],[8,2]],
+  c:[[9,9],[10,10],[10,16],[9,17],[8,16],[8,10]],
+  d:[[2,16],[8,16],[9,17],[8,18],[2,18],[1,17]],
+  e:[[1,9],[2,10],[2,16],[1,17],[0,16],[0,10]],
+  f:[[1,1],[2,2],[2,8],[1,9],[0,8],[0,2]],
+  g:[[2,8],[8,8],[9,9],[8,10],[2,10],[1,9]]
+};
+const SEG_DIGITS = ["abcdef","bc","abdeg","abcdg","bcfg","acdfg","acdefg","abc","abcdefg","abcdfg"];
+const SEG_POINTS = {};
+Object.keys(SEG_SHAPES).forEach(k => {
+  const pts = SEG_SHAPES[k];
+  const cx = pts.reduce((a, q) => a + q[0], 0) / pts.length, cy = pts.reduce((a, q) => a + q[1], 0) / pts.length;
+  SEG_POINTS[k] = pts.map(([x, y]) => (cx + (x - cx) * .86).toFixed(2) + "," + (cy + (y - cy) * .86).toFixed(2)).join(" ");
+});
+function segSvg(text, colonOn){
+  let x = 0, body = "";
+  for(const ch of text){
+    if(ch === ":"){
+      const cls = colonOn ? "lit" : "off";
+      body += '<rect class="' + cls + '" x="' + (x + .4) + '" y="4.6" width="2" height="2"/><rect class="' + cls + '" x="' + (x + .4) + '" y="11.4" width="2" height="2"/>';
+      x += 4.6;
+      continue;
+    }
+    const lit = SEG_DIGITS[+ch] || "";
+    body += '<g transform="translate(' + x + ' 0)">' +
+      Object.keys(SEG_POINTS).map(k => '<polygon class="' + (lit.includes(k) ? "lit" : "off") + '" points="' + SEG_POINTS[k] + '"/>').join("") +
+      "</g>";
+    x += 13;
+  }
+  return '<svg class="seg7" viewBox="-1 -0.5 ' + (x - 1) + ' 19" aria-hidden="true" focusable="false"><g transform="skewX(-7) translate(1.2 0)">' + body + "</g></svg>";
+}
+
+let watchTicker = null;
+let watchShown = "";
+function syncWatch(){
+  const running = !!(state.watch && state.watch.startedAt);
+  const ms = watchMs();
+  const text = watchText(ms);
+  if(text !== watchShown){
+    $watchTime.innerHTML = segSvg(text, true);
+    watchShown = text;
+  }
+  $watchTime.setAttribute("aria-label", "Ретро идёт " + watchWords(ms));
+  $watchTime.title = "Прошло " + watchWords(ms) + (running ? "" : ms > 0 ? " · на паузе" : "");
+  $watch.classList.toggle("on", running);
+  $watch.classList.toggle("paused", !running && ms > 0);
+  const icon = running ? PAUSE_ICON : PLAY_ICON;
+  if($watchGo.dataset.icon !== (running ? "pause" : "play")){
+    $watchGo.innerHTML = icon;
+    $watchGo.dataset.icon = running ? "pause" : "play";
+  }
+  $watchGo.title = running ? "Пауза" : ms > 0 ? "Продолжить" : "Запустить секундомер ретро";
+  $watchGo.setAttribute("aria-label", $watchGo.title);
+  $watchStop.disabled = !running && ms === 0;
+  document.title = running || ms > 0 ? text + " · Ретро" : "Ретро";
+  if(running && !watchTicker) watchTicker = setInterval(syncWatch, 500);
+  if(!running && watchTicker){ clearInterval(watchTicker); watchTicker = null; }
+}
+$watchGo.onclick = () => {
+  const w = state.watch || (state.watch = {acc:0, startedAt:null});
+  if(w.startedAt){ w.acc = watchMs(); w.startedAt = null; }
+  else w.startedAt = Date.now();
+  save();
+  syncWatch();
+};
+$watchStop.onclick = () => {
+  const prev = state.watch && Object.assign({}, state.watch);
+  const was = watchWords(watchMs());
+  state.watch = null;
+  save();
+  syncWatch();
+  if(prev) toast("Секундомер сброшен, было " + was, "Вернуть", () => { state.watch = prev; save(); syncWatch(); });
+};
+
+const $view = document.getElementById("view");
+function syncView(){
+  $view.querySelectorAll("[data-view]").forEach(b => b.setAttribute("aria-pressed", (state.ui.view || "tabs") === b.dataset.view ? "true" : "false"));
+}
+function setView(v){
+  if((state.ui.view || "tabs") === v) return;
+  const id = current() && current().id;
+  state.ui.view = v;
+  render();
+  if(id) openTab(id);
+}
+$view.querySelectorAll("[data-view]").forEach(b => b.onclick = () => setView(b.dataset.view));
 
 const THEME_NAMES = {auto:"как в системе", light:"светлая", dark:"тёмная"};
 const THEME_ICONS = {
@@ -2008,6 +2247,7 @@ window.addEventListener("storage", e => {
     const keepId = row && active.classList.contains("ta") ? row.dataset.id : null;
     const pos = keepId ? active.selectionStart : 0;
     next.ui.tab = state.ui.tab;
+    next.ui.view = state.ui.view;
     next.ui.caret = state.ui.caret;
     state = next;
     syncing = true;
